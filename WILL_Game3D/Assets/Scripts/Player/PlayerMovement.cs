@@ -34,7 +34,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.magnitude > 0.01f)
         {
-            Vector3 targetVelocity = input * moveSpeed;
+            // Convert input to player-relative movement
+            Vector3 moveDirection =
+                transform.right * input.x +
+                transform.forward * input.z;
+
+            Vector3 targetVelocity = moveDirection * moveSpeed;
 
             velocity = Vector3.MoveTowards(
                 velocity,
@@ -48,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         transform.position += velocity * Time.deltaTime;
-    }
+}
 
     void RotateToMouse()
     {
