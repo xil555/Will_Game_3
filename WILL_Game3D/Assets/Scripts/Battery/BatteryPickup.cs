@@ -1,19 +1,24 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+/* 
+    Battery pickup:
+    - Adds battery amount (currently just logs)
+    - Uses centralized EventDebugManager
+    - Destroys pickup object after collection
+*/
+public class BatteryPickup : MonoBehaviour
 {
     public int batteryAmount = 30;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Picked up battery! +" + batteryAmount);
+        if (!other.CompareTag("Player")) return;
 
-            // Later:
-            // other.GetComponent<PlayerBattery>().AddBattery(batteryAmount);
+        // Log the pickup through centralized event system
+        EventDebugManager.Instance.TriggerEvent("Picked up battery! +" + batteryAmount);
 
-            Destroy(gameObject); // remove battery after pickup
-        }
+        // TODO: later add to player's flashlight battery
+
+        Destroy(gameObject);
     }
 }
