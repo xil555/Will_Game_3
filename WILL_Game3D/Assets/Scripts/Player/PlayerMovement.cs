@@ -7,73 +7,55 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 8f;
     public float acceleration = 40f;
 
-    [Header("Rotation")]
-    public float rotationSpeed = 25f;
-    public LayerMask groundMask;
-
-    private Vector3 velocity;
-    private Camera cam;
+    private Rigidbody rb;
+    private Vector3 currentVelocity;
+    private Vector3 inputDirection;
 
     void Start()
     {
-        cam = Camera.main;
+        rb = GetComponent<Rigidbody>();
+
+        // Prevent tipping over
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | 
+                         RigidbodyConstraints.FreezeRotationZ;
     }
 
     void Update()
     {
+        // Read input ONLY here
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        inputDirection = new Vector3(h, 0f, v).normalized;
+    }
+
+    void FixedUpdate()
+    {
         HandleMovement();
-        RotateToMouse();
     }
 
     void HandleMovement()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        Vector3 input = new Vector3(h, 0f, v).normalized;
-
-        if (input.magnitude > 0.01f)
+        if (inputDirection.magnitude > 0.01f)
         {
-            // Convert input to player-relative movement
+            // Player-relative movement
             Vector3 moveDirection =
-                transform.right * input.x +
-                transform.forward * input.z;
+                transform.right * inputDirection.x +
+                transform.forward * inputDirection.z;
 
             Vector3 targetVelocity = moveDirection * moveSpeed;
 
-            velocity = Vector3.MoveTowards(
-                velocity,
+            currentVelocity = Vector3.MoveTowards(
+                currentVelocity,
                 targetVelocity,
-                acceleration * Time.deltaTime
+                acceleration * Time.fixedDeltaTime
             );
         }
         else
         {
-            velocity = Vector3.zero;
+            currentVelocity = Vector3.zero;
         }
 
-        transform.position += velocity * Time.deltaTime;
-}
-
-    void RotateToMouse()
-    {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundMask))
-        {
-            Vector3 direction = hit.point - transform.position;
-            direction.y = 0f;
-
-            if (direction.sqrMagnitude > 0.01f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    targetRotation,
-                    rotationSpeed * Time.deltaTime
-                );
-            }
-        }
+        rb.MovePosition(rb.position + currentVelocity * Time.fixedDeltaTime);
     }
 }
