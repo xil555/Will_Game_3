@@ -1,0 +1,19 @@
+{
+  "conversations": [
+    {
+      "id": "TutorialNPC",
+      "lines": [
+        "Welcome to the tutorial",
+        "its dangerous walking alone at night",
+        "Take these batteries and find your way home."
+      ]
+    },
+    {
+      "id": "SignPost",
+      "lines": [
+        "Danger: High winds ahead.",
+        "Watch your step."
+      ]
+    }
+  ]
+}

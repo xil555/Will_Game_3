@@ -1,34 +1,30 @@
 using UnityEngine;
 
-
-/*TODO
-    triggers player dialogue if enters range 
-    will display UI display calling player over 
- */
 public class DialogueTest : MonoBehaviour
 {
+    [Header("Dialogue Settings")]
+    [SerializeField] private string npcID = "TutorialNPC"; // Change this in Inspector for each NPC
+
+    [Header("Ranges")]
     [SerializeField] private SphereCollider outerRange; 
     [SerializeField] private SphereCollider innerRange; 
 
-    private bool playerInOuterRange = false;
     private bool playerInInnerRange = false;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
-        // Player enters outer range
+        // Using your IsFromCollider helper
         if (IsFromCollider(outerRange, other))
         {
-            playerInOuterRange = true;
-            EventDebugManager.Instance.TriggerEvent("Player entered outer range: Come here");
+            EventDebugManager.Instance.TriggerEvent("NPC: 'Hey! Come here!'");
         }
 
-        // Player enters inner range
         if (IsFromCollider(innerRange, other))
         {
             playerInInnerRange = true;
-            EventDebugManager.Instance.TriggerEvent("Player entered inner range: Press E to interact");
+            EventDebugManager.Instance.TriggerEvent("Press E to Talk");
         }
     }
 
@@ -36,11 +32,12 @@ public class DialogueTest : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        if (IsFromCollider(outerRange, other))
-            playerInOuterRange = false;
-
         if (IsFromCollider(innerRange, other))
+        {
             playerInInnerRange = false;
+            // Optional: Close dialogue if player walks away
+            // DialogueSystem.Instance.EndDialogue(); 
+        }
     }
 
     private void Update()
@@ -54,13 +51,20 @@ public class DialogueTest : MonoBehaviour
 
     private void Interact()
     {
-        EventDebugManager.Instance.TriggerEvent("Player pressed E: UI Dialogue Tutorial");
+        if (DialogueSystem.Instance.IsInConversation())
+        {
+            DialogueSystem.Instance.AdvanceDialogue();
+        }
+        else
+        {
+            DialogueSystem.Instance.StartDialogue(npcID);
+        }
     }
 
-    // Helper method to check which collider was triggered
     private bool IsFromCollider(SphereCollider sphere, Collider other)
     {
-        // Checks if the other collider is touching the sphere bounds
+        // Null check to prevent errors if you forget to assign one in Inspector
+        if (sphere == null) return false;
         return other.bounds.Intersects(sphere.bounds);
     } 
 }

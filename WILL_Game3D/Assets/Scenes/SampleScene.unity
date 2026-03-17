@@ -3162,6 +3162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a4c61abc42749b4d9d24675a03b0c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueTest
+  npcID: TutorialNPC
   outerRange: {fileID: 1051339098}
   innerRange: {fileID: 1051339100}
 --- !u!135 &1051339098
@@ -4688,6 +4689,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1752012453}
   - component: {fileID: 1752012452}
+  - component: {fileID: 1752012455}
+  - component: {fileID: 1752012454}
   m_Layer: 0
   m_Name: DebugManager
   m_TagString: Untagged
@@ -4722,6 +4725,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1752012454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752012451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c24a2ac1d41fe8248ac50a35f3288064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
+--- !u!114 &1752012455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752012451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 491b2046f59add444b8430f51e2f4a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSystem
 --- !u!1 &1830804509
 GameObject:
   m_ObjectHideFlags: 0
