@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
@@ -8,12 +9,15 @@ public class PlayerMovement : MonoBehaviour
     public float acceleration = 40f;
 
     private Rigidbody rb;
+    private Animator animator;
+
     private Vector3 currentVelocity;
     private Vector3 inputDirection;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
 
         // Prevent tipping over
         rb.constraints = RigidbodyConstraints.FreezeRotationX | 
@@ -27,6 +31,10 @@ public class PlayerMovement : MonoBehaviour
         float v = Input.GetAxisRaw("Vertical");
 
         inputDirection = new Vector3(h, 0f, v).normalized;
+
+        // 🎬 Update animation parameter
+        float speed = inputDirection.magnitude;
+        animator.SetFloat("Speed", speed);
     }
 
     void FixedUpdate()
@@ -49,6 +57,14 @@ public class PlayerMovement : MonoBehaviour
                 currentVelocity,
                 targetVelocity,
                 acceleration * Time.fixedDeltaTime
+            );
+
+            // Optional: rotate player toward movement direction
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                10f * Time.fixedDeltaTime
             );
         }
         else
