@@ -51,13 +51,14 @@ public class DialogueTest : MonoBehaviour
 
     private void Interact()
     {
-        if (DialogueSystem.Instance.IsInConversation())
+        // Check if the UI is already showing
+        if (DialogueManager.Instance.IsActive())
         {
-            DialogueSystem.Instance.AdvanceDialogue();
+            DialogueManager.Instance.DisplayNextSentence();
         }
         else
         {
-            DialogueSystem.Instance.StartDialogue(npcID);
+            DialogueManager.Instance.StartDialogue(npcID);
         }
     }
 

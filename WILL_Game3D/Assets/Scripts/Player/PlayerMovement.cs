@@ -26,13 +26,23 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Read input ONLY here
+        // 1. Check if the Dialogue System is currently running
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
+        {
+            // Reset input so the player doesn't keep sliding
+            inputDirection = Vector3.zero;
+        
+            // Ensure the animator returns to Idle
+            animator.SetFloat("Speed", 0f);
+        
+            return; // Exit Update early so movement logic doesn't run
+        }
+
+        // 2. Normal movement input (Existing code)
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-
         inputDirection = new Vector3(h, 0f, v).normalized;
 
-        // 🎬 Update animation parameter
         float speed = inputDirection.magnitude;
         animator.SetFloat("Speed", speed);
     }
