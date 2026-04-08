@@ -8,17 +8,31 @@ using UnityEngine;
 */
 public class BatteryPickup : MonoBehaviour
 {
+
+    PlayerStats playerStats;
     public int batteryAmount = 30;
+
+    void Start()
+    {
+        playerStats = FindObjectOfType<PlayerStats>();
+
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
-
-        // Log the pickup through centralized event system
-        EventDebugManager.Instance.TriggerEvent("Picked up battery! +" + batteryAmount);
-
-        // TODO: later add to player's flashlight battery
+        OnBatteryPickup();
 
         Destroy(gameObject);
+    }
+
+    public void OnBatteryPickup()
+    {
+        // This method can be called by PlayerStats when the battery is picked up
+        // For now, it just logs the pickup, but it can be expanded to update player stats
+        EventDebugManager.Instance.TriggerEvent("Battery pickup event triggered! +" + batteryAmount);
+
+        playerStats.battery += batteryAmount; // Update the player's battery stat
+
+
     }
 }
