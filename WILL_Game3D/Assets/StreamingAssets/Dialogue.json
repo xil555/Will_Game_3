@@ -10,11 +10,9 @@
       ]
     },
     {
-      "id": "otherman",
+      "id": "FinishTutorialNPC",
       "lines": [
-        "Howdy lad ",
-        "Im sure its past your bedtime now",
-        "Watch your step."
+        "Congratulations on finishing the tutorial, now you can start the game and find your way home"
       ]
     }
   ]

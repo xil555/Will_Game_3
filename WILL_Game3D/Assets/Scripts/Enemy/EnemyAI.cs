@@ -44,6 +44,11 @@ public class EnemyAI : MonoBehaviour
         {
             currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
         }
+
+        if (agent.hasPath && agent.destination == player.position) 
+        {
+            agent.ResetPath();
+        }
     }
 
     void ChasePlayer()
