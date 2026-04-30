@@ -686,22 +686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 8
   acceleration: 40
---- !u!114 &114463433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114463422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adffc8bc2b101d408a54e1e70dc96a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerLook
-  rotationSpeed: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
+  deceleration: 50
 --- !u!114 &114463436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -865,6 +850,21 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2447f868c1c668c47b0baacae3edb64b, type: 3}
   - {fileID: 8300000, guid: f9879eae21fb62045921aaf88e5c4da2, type: 3}
   stepInterval: 0.5
+--- !u!114 &114463449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114463422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adffc8bc2b101d408a54e1e70dc96a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLook
+  mouseSensitivity: 2
+  upDownRange: 80
+  playerCamera: {fileID: 330585546}
 --- !u!1 &122883670
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,9 +1101,6 @@ PrefabInstance:
       addedObject: {fileID: 114463430}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 114463433}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 114463436}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
       insertIndex: -1
@@ -1117,6 +1114,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
       insertIndex: -1
       addedObject: {fileID: 114463445}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 114463449}
   m_SourcePrefab: {fileID: 100100000, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
 --- !u!1001 &193687559
 PrefabInstance:
@@ -1639,13 +1639,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5015897, y: -0, z: -0, w: 0.8651057}
-  m_LocalPosition: {x: 0.09, y: 54.1, z: -23}
+  m_LocalRotation: {x: -0.009979332, y: -0, z: -0, w: 0.99995023}
+  m_LocalPosition: {x: 0.08999997, y: 7.17, z: 0.56}
   m_LocalScale: {x: 5.1079016, y: 11.375717, z: 9.072825}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 122883671}
-  m_LocalEulerAnglesHint: {x: 60.21, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -1.144, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0

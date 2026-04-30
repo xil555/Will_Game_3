@@ -2,63 +2,51 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
-    public float rotationSpeed = 8f;
-    public LayerMask groundLayer;
+    [Header("Settings")]
+    public float mouseSensitivity = 2f;
+    public float upDownRange = 80f;
 
-    private Camera cam;
+    [Header("References")]
+    public Transform playerCamera;
+
     private Rigidbody rb;
-
-    private Quaternion targetRotation;
-    private bool isRotating = false;
+    private float verticalRotation = 0f;
 
     void Start()
     {
-        cam = Camera.main;
         rb = GetComponent<Rigidbody>();
-        targetRotation = rb.rotation;
+
+        // Lock the cursor to the middle of the screen and hide it
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // Ensure the Rigidbody doesn't fight the rotation logic
+        if (rb != null)
+        {
+            rb.freezeRotation = true;
+        }
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) 
+        // 1. Dialogue Lock - Stop looking around if talking
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
         {
-            SetTargetRotation();
+            // Optional: Unlock cursor during dialogue
+            // Cursor.lockState = CursorLockMode.None;
+            // Cursor.visible = true;
+            return;
         }
-    }
 
-    void SetTargetRotation()
-    {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        // 2. Horizontal Rotation (Turning the whole body Left/Right)
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        transform.Rotate(Vector3.up * mouseX);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundLayer))
-        {
-            Vector3 direction = hit.point - transform.position;
-            direction.y = 0f;
-
-            if (direction.sqrMagnitude > 0.01f)
-            {
-                targetRotation = Quaternion.LookRotation(direction);
-                isRotating = true;
-            }
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (!isRotating) return;
-
-        Quaternion newRotation = Quaternion.Slerp(
-            rb.rotation,
-            targetRotation,
-            rotationSpeed * Time.fixedDeltaTime
-        );
-
-        rb.MoveRotation(newRotation);
-
-        if (Quaternion.Angle(rb.rotation, targetRotation) < 1f)
-        {
-            rb.MoveRotation(targetRotation);
-            isRotating = false;
-        }
+        // 3. Vertical Rotation (Looking Up/Down with just the Camera)
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        verticalRotation -= mouseY;
+        verticalRotation = Mathf.Clamp(verticalRotation, -upDownRange, upDownRange);
+        
+        playerCamera.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
     }
 }
