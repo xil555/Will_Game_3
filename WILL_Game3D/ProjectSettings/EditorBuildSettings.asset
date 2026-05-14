@@ -9,8 +9,20 @@ EditorBuildSettings:
     path: Assets/Scenes/Tutorial.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
+    path: Assets/Scenes/Hard.unity
+    guid: fcc5a09ac8ce36345827329f05176535
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 63dda8d060b53bc4a8cdeca0000539e4
+  - enabled: 1
+    path: Assets/Scenes/Medium.unity
+    guid: f4858c8c1867b8643b1a56d542038e78
+  - enabled: 1
+    path: Assets/Scenes/Easy.unity
+    guid: 3981a4e548bbf324093dcf6f720dea2a
+  - enabled: 1
+    path: Assets/Scenes/Pause.unity
+    guid: 59afcabdb4d8f4f48a2873f80f59784a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
