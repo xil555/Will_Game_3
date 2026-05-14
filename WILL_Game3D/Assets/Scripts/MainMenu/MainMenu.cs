@@ -23,5 +23,15 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
         Debug.Log("Quit Game");
     }
+
+    public void Credits()
+    {
+        SceneManager.LoadScene("CreditMenu");
+    }
+
+    public void OpenMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }
 
