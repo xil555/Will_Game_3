@@ -17,7 +17,10 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (battery > 60)
+        {
+            Debug.Log("Battery level good");
+        }
     }
 
     

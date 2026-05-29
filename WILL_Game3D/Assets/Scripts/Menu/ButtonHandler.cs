@@ -18,4 +18,11 @@ public class ButtonHandler : MonoBehaviour
         Debug.Log("Hard Button Clicked!");
         SceneManager.LoadScene("Hard");
     }
+
+    public void OnTutorialButtonClick()
+    {
+        Debug.Log("Tutorial Button Clicked!");
+        SceneManager.LoadScene("Tutorial");
+    }
+
 }

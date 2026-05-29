@@ -4324,7 +4324,7 @@ PrefabInstance:
     - target: {fileID: 7445603436252104128, guid: c2e4cec4b7cbcbe47a8ceccb66e3a585, type: 3}
       propertyPath: backgroundMusic
       value: 
-      objectReference: {fileID: 8300000, guid: 6aec62849ca14c84d817648e7df9468e, type: 3}
+      objectReference: {fileID: 8300000, guid: 4282c35c9ef6df442b6734cdeff31ae6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6750,6 +6750,19 @@ MonoBehaviour:
   mouseSensitivity: 2
   upDownRange: 80
   playerCamera: {fileID: 230047872}
+--- !u!114 &1054711797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054711773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fca2ade048029a46b12d428b167d55b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
+  deathSceneName: MainMenu
 --- !u!1001 &1057741133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8116,6 +8129,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5472946633108230891, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1054711785}
+    - targetCorrespondingSourceObject: {fileID: 5472946633108230891, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1054711797}
   m_SourcePrefab: {fileID: 100100000, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
 --- !u!1001 &1202962505
 PrefabInstance:
@@ -9008,6 +9024,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a68d5b2a44ea9c4f9769976df5fe084, type: 3}
+--- !u!1 &1339700163 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1928122489070299575, guid: e64171bb71b455549a7678e3387cc878, type: 3}
+  m_PrefabInstance: {fileID: 7378269353749964237}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1339700166
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339700163}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1.7, y: 1.41, z: 5.07}
+  m_Center: {x: 0, y: 0.83, z: 0}
+--- !u!54 &1339700167
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339700163}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 4
+  m_CollisionDetection: 1
 --- !u!1001 &1364862066
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14391,6 +14460,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Car
       objectReference: {fileID: 0}
+    - target: {fileID: 1928122489070299575, guid: e64171bb71b455549a7678e3387cc878, type: 3}
+      propertyPath: m_TagString
+      value: Police
+      objectReference: {fileID: 0}
     - target: {fileID: 7415193114348549238, guid: e64171bb71b455549a7678e3387cc878, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
@@ -14406,7 +14479,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1928122489070299575, guid: e64171bb71b455549a7678e3387cc878, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1339700166}
+    - targetCorrespondingSourceObject: {fileID: 1928122489070299575, guid: e64171bb71b455549a7678e3387cc878, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1339700167}
   m_SourcePrefab: {fileID: 100100000, guid: e64171bb71b455549a7678e3387cc878, type: 3}
 --- !u!1001 &8510263769159874653
 PrefabInstance:
