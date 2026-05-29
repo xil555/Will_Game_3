@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6033422334180367143
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.39012
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.39012
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.39012
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.4116333
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00999999
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.6797445
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.71735466
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.69670826
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -88.327
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4700725489559409698, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0dbda68acdf8e344f9192968417ed87e, type: 2}
+    - target: {fileID: 919132149155446097, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      propertyPath: m_Name
+      value: Car
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2544660911527263159}
+  m_SourcePrefab: {fileID: 100100000, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+--- !u!1 &6879930627923617398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e51070e42f9799940bf9d44485ec250c, type: 3}
+  m_PrefabInstance: {fileID: 6033422334180367143}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2544660911527263159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6879930627923617398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c431e73dae75f4aa11f4ab1f00e327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoliceCarFollow
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  speed: 3.18
+  rotationSpeed: 5

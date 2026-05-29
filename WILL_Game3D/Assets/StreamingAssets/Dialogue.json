@@ -14,6 +14,13 @@
       "lines": [
         "Congratulations on finishing the tutorial, now you can start the game and find your way home"
       ]
+    },
+    {
+      "id": "OldMan",
+      "lines": [
+        "Hey there, you look like you could use some help",
+        "I have a quest for you, Dont get caught by the cops, they will take all youre stuff and put you in jail"
+      ]
     }
   ]
 }
