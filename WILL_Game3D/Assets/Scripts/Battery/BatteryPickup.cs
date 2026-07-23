@@ -1,38 +1,31 @@
 using UnityEngine;
 
-/* 
-    Battery pickup:
-    - Adds battery amount (currently just logs)
-    - Uses centralized EventDebugManager
-    - Destroys pickup object after collection
-*/
 public class BatteryPickup : MonoBehaviour
 {
-
     PlayerStats playerStats;
     public int batteryAmount = 30;
 
     void Start()
     {
         playerStats = FindObjectOfType<PlayerStats>();
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        OnBatteryPickup();
+        if (!other.CompareTag("Player")) return;
 
-        Destroy(gameObject);
-    }
+        // Fallback: find PlayerStats on the colliding object directly
+        if (playerStats == null)
+            playerStats = other.GetComponent<PlayerStats>();
 
-    public void OnBatteryPickup()
-    {
-        // This method can be called by PlayerStats when the battery is picked up
-        // For now, it just logs the pickup, but it can be expanded to update player stats
+        if (playerStats == null)
+        {
+            Debug.LogWarning("BatteryPickup: Could not find PlayerStats on the Player!");
+            return;
+        }
+
+        playerStats.battery += batteryAmount;
         EventDebugManager.Instance.TriggerEvent("Battery pickup event triggered! +" + batteryAmount);
-
-        playerStats.battery += batteryAmount; // Update the player's battery stat
-
-
+        Destroy(gameObject);
     }
 }

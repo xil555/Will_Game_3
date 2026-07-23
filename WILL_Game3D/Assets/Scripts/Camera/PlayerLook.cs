@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerLook : MonoBehaviour
 {
@@ -16,15 +17,33 @@ public class PlayerLook : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        // Lock the cursor to the middle of the screen and hide it
+        if (rb != null)
+            rb.freezeRotation = true;
+
+        LockCursor();
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Re-lock cursor whenever the player lands in a new scene
+        LockCursor();
+        verticalRotation = 0f;
+    }
+
+    void LockCursor()
+    {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        // Ensure the Rigidbody doesn't fight the rotation logic
-        if (rb != null)
-        {
-            rb.freezeRotation = true;
-        }
     }
 
     void Update()

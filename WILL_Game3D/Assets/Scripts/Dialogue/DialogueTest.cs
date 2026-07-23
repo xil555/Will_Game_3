@@ -44,32 +44,41 @@ public class DialogueTest : MonoBehaviour
 
     private void Start()
     {
-        
-        playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObject != null)
+        {
+            playerStats = playerObject.GetComponent<PlayerStats>();
+        }
 
         if (playerStats == null)
         {
-            Debug.LogError("DialogueTest: Could not find PlayerStats on the Player object! Make sure the tag is set to 'Player'.");
+            Debug.LogWarning("DialogueTest: Could not find PlayerStats on the Player object. Will retry each frame.");
         }
-}
+    }
 
     private void Update()
     {
+        // Retry finding the player if it was spawned after this object started
+        if (playerStats == null)
+        {
+            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null)
+                playerStats = playerObject.GetComponent<PlayerStats>();
+        }
+
         if (playerInInnerRange && Input.GetKeyDown(KeyCode.E))
-    {
-        // Check if we meet the requirements for the 2nd dialogue
-        if (playerStats.battery >= 60 && playerStats.keys >= 3)
         {
-            // Start the special dialogue
-            DialogueManager.Instance.StartDialogue("FinishTutorialNPC");
-            
-            StartCoroutine(WaitAndLoadLevel());
+            if (playerStats != null && playerStats.battery >= 60 && playerStats.keys >= 3)
+            {
+                DialogueManager.Instance.StartDialogue("FinishTutorialNPC");
+                StartCoroutine(WaitAndLoadLevel());
+            }
+            else
+            {
+                Interact();
+            }
         }
-        else
-        {
-            Interact();
-        }
-    }
     }
 
     private void Interact()

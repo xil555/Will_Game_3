@@ -2,18 +2,22 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     PlayerStats playerStats;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerStats = FindObjectOfType<PlayerStats>();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Player may be spawned at runtime — keep trying until found
+        if (playerStats == null)
+        {
+            playerStats = FindObjectOfType<PlayerStats>();
+            return;
+        }
+
         if (playerStats.keys >= 3)
         {
             EventDebugManager.Instance.TriggerEvent("Player has more than 3 keys!");

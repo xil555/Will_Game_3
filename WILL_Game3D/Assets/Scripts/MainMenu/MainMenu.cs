@@ -11,10 +11,6 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-      
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         SceneManager.LoadScene("LobbySystem");
     }
 
