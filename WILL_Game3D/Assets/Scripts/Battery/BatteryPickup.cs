@@ -25,7 +25,14 @@ public class BatteryPickup : MonoBehaviour
         }
 
         playerStats.battery += batteryAmount;
-        EventDebugManager.Instance.TriggerEvent("Battery pickup event triggered! +" + batteryAmount);
+        playerStats.batteriesCollected++;
+
+        if (ObjectiveManager.Instance != null)
+            ObjectiveManager.Instance.ReportBatteryCollected(1);
+
+        if (EventDebugManager.Instance != null)
+            EventDebugManager.Instance.TriggerEvent("Battery pickup event triggered! +" + batteryAmount);
+
         Destroy(gameObject);
     }
 }

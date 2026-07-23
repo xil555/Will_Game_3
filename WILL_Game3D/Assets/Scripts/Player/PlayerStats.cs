@@ -8,6 +8,7 @@ public class PlayerStats : MonoBehaviour
     [Header("Inventory")]
     [SerializeField] public int keys = 0;
     [SerializeField] public int battery = 0;
+    [HideInInspector] public int batteriesCollected = 0;
 
     [Header("Stamina")]
     public float maxStamina = 100f;

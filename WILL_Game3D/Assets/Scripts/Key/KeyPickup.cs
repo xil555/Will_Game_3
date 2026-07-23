@@ -26,7 +26,13 @@ public class KeyPickup : MonoBehaviour
         }
 
         playerStats.keys += keyAmount;
-        EventDebugManager.Instance.TriggerEvent("Key pickup event triggered! +" + keyAmount);
+
+        if (ObjectiveManager.Instance != null)
+            ObjectiveManager.Instance.ReportKeyCollected(keyAmount);
+
+        if (EventDebugManager.Instance != null)
+            EventDebugManager.Instance.TriggerEvent("Key pickup event triggered! +" + keyAmount);
+
         Destroy(gameObject);
     }
 }
