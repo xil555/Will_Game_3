@@ -1,20 +1,24 @@
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
-{   
+{
+    [Header("Health")]
     [SerializeField] public float health = 100f;
+
+    [Header("Inventory")]
     [SerializeField] public int keys = 0;
     [SerializeField] public int battery = 0;
 
+    [Header("Stamina")]
+    public float maxStamina = 100f;
+    [HideInInspector] public float stamina;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("PlayerStats initialized."); 
-
+        stamina = maxStamina;
+        Debug.Log("PlayerStats initialized.");
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (battery > 60)
@@ -22,6 +26,4 @@ public class PlayerStats : MonoBehaviour
             Debug.Log("Battery level good");
         }
     }
-
-    
 }
