@@ -91,6 +91,12 @@ public class DialogueTest : MonoBehaviour
         else
         {
             DialogueManager.Instance.StartDialogue(npcID);
+            Debug.Log("[Objective] Started dialogue with NPC '" + npcID + "'");
+
+            if (ObjectiveManager.Instance != null)
+                ObjectiveManager.Instance.ReportNpcTalked(npcID);
+            else
+                Debug.LogWarning("[Objective] Talked to NPC but no ObjectiveManager exists in this scene.");
         }
     }
 

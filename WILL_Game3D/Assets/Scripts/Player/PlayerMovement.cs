@@ -62,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 currentBobOffset;
     private float bobTimer;
     private bool cameraRestCaptured;
+    private float sprintNoiseTimer;
 
     public bool IsGrounded => isGrounded;
     public bool IsSprinting => isSprinting;
@@ -82,10 +83,26 @@ public class PlayerMovement : MonoBehaviour
 
         ResolveCamera();
         CaptureCameraRest();
+
+        if (GetComponent<PlayerStealth>() == null)
+            gameObject.AddComponent<PlayerStealth>();
+        if (GetComponent<DistractThrow>() == null)
+            gameObject.AddComponent<DistractThrow>();
     }
 
     void Update()
     {
+        if (PauseMenu.IsPaused)
+            return;
+
+        if (PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden)
+        {
+            inputDirection = Vector3.zero;
+            isSprinting = false;
+            if (animator) animator.SetFloat("Speed", 0f);
+            return;
+        }
+
         if (DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
         {
             inputDirection = Vector3.zero;
@@ -101,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
         inputDirection = new Vector3(h, 0f, v).normalized;
 
         HandleSprint();
+        EmitMovementNoise();
 
         if (animator)
         {
@@ -158,6 +176,28 @@ public class PlayerMovement : MonoBehaviour
                 if (!canSprint && playerStats.stamina >= playerStats.maxStamina * 0.25f)
                     canSprint = true;
             }
+        }
+    }
+
+    void EmitMovementNoise()
+    {
+        bool moving = inputDirection.sqrMagnitude > 0.01f && isGrounded;
+        if (!moving)
+            return;
+
+        sprintNoiseTimer -= Time.deltaTime;
+        if (sprintNoiseTimer > 0f)
+            return;
+
+        if (isSprinting)
+        {
+            sprintNoiseTimer = 0.26f;
+            NoiseEvent.Emit(transform.position, 0.75f);
+        }
+        else
+        {
+            sprintNoiseTimer = 0.55f;
+            NoiseEvent.Emit(transform.position, 0.22f);
         }
     }
 

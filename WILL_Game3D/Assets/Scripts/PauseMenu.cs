@@ -1,37 +1,127 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    public static bool IsPaused { get; private set; }
+
     public GameObject pauseMenu;
 
-    private void Start()
+    Canvas pauseCanvas;
+
+    // Unity keeps Time.timeScale at 0 after you stop play while paused.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void ResetTimeOnLoad()
     {
-        pauseMenu.SetActive(false);
+        IsPaused = false;
+        Time.timeScale = 1f;
     }
-    void Update()
+
+    void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        IsPaused = false;
+        Time.timeScale = 1f;
+    }
+
+    void Start()
+    {
+        EnsureEventSystem();
+
+        if (pauseMenu != null)
         {
-            pauseMenu.SetActive(true);
-            Time.timeScale = 0f;
+            pauseCanvas = pauseMenu.GetComponent<Canvas>();
+            if (pauseCanvas == null)
+                pauseCanvas = pauseMenu.GetComponentInParent<Canvas>();
+
+            pauseMenu.SetActive(false);
+        }
+
+        IsPaused = false;
+        Time.timeScale = 1f;
+        SetCursorLocked(true);
+    }
+
+    void OnDisable()
+    {
+        if (IsPaused)
+        {
+            Time.timeScale = 1f;
+            IsPaused = false;
         }
     }
 
-    public void MainMenuButton()
+    void Update()
     {
-        SceneManager.LoadScene("MainMenu");
+        if (!Input.GetKeyDown(KeyCode.Escape))
+            return;
+
+        if (IsPaused)
+            Resume();
+        else
+            Pause();
     }
 
     public void ResumeButton()
     {
-       pauseMenu.SetActive(false);
-        Time.timeScale = 1f;
+        Resume();
+    }
+
+    public void MainMenuButton()
+    {
+        Resume();
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void QuitGame()
     {
+        Resume();
         Application.Quit();
     }
 
+    void Pause()
+    {
+        if (pauseMenu == null)
+            return;
+
+        IsPaused = true;
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0f;
+
+        if (pauseCanvas != null)
+        {
+            pauseCanvas.overrideSorting = true;
+            pauseCanvas.sortingOrder = 200;
+        }
+
+        SetCursorLocked(false);
+        EnsureEventSystem();
+    }
+
+    void Resume()
+    {
+        IsPaused = false;
+
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
+
+        Time.timeScale = 1f;
+        SetCursorLocked(true);
+    }
+
+    static void SetCursorLocked(bool locked)
+    {
+        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !locked;
+    }
+
+    static void EnsureEventSystem()
+    {
+        if (EventSystem.current != null)
+            return;
+
+        GameObject es = new GameObject("EventSystem");
+        es.AddComponent<EventSystem>();
+        es.AddComponent<StandaloneInputModule>();
+    }
 }

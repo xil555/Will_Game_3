@@ -4,6 +4,8 @@ using TMPro;
 /// <summary>
 /// Display-only. Put on the player Canvas TextMeshPro.
 /// Reads the current objective from the scene's ObjectiveManager.
+/// Do not type the battery/key objective into No Objective Text — that field
+/// is only used when a scene has no ObjectiveManager at all.
 /// </summary>
 public class ObjectiveUI : MonoBehaviour
 {
@@ -11,65 +13,97 @@ public class ObjectiveUI : MonoBehaviour
     public TextMeshProUGUI objectiveText;
 
     [Header("Settings")]
-    [Tooltip("Text shown when the scene has no ObjectiveManager.")]
+    [Tooltip("Fallback only. Leave blank. Real objective text comes from the scene ObjectiveManager.")]
     public string noObjectiveText = "";
 
-    private bool isSubscribed;
+    private ObjectiveManager boundManager;
+    private string lastLoggedText;
+
+    void Awake()
+    {
+        if (objectiveText == null)
+            objectiveText = GetComponent<TextMeshProUGUI>();
+
+        Debug.Log("[ObjectiveUI] Running on " + gameObject.name
+            + ". Text assigned: " + (objectiveText != null), this);
+    }
 
     void OnEnable()
     {
-        TrySubscribe();
+        BindToManager(true);
         Refresh();
     }
 
     void OnDisable()
     {
-        Unsubscribe();
+        Unbind();
     }
 
     void Update()
     {
-        // Scene changed / manager destroyed — clear stale subscription
-        if (isSubscribed && ObjectiveManager.Instance == null)
-        {
-            isSubscribed = false;
-            Refresh();
-            return;
-        }
-
-        if (!isSubscribed)
-            TrySubscribe();
-    }
-
-    void TrySubscribe()
-    {
-        if (ObjectiveManager.Instance == null || isSubscribed) return;
-
-        ObjectiveManager.Instance.OnObjectiveChanged += Refresh;
-        isSubscribed = true;
+        BindToManager(false);
         Refresh();
     }
 
-    void Unsubscribe()
+    void BindToManager(bool force)
     {
-        if (!isSubscribed) return;
+        ObjectiveManager current = ObjectiveManager.Instance;
+        if (current == null)
+            current = FindObjectOfType<ObjectiveManager>();
 
-        if (ObjectiveManager.Instance != null)
-            ObjectiveManager.Instance.OnObjectiveChanged -= Refresh;
+        if (current == boundManager && !force)
+            return;
 
-        isSubscribed = false;
+        Unbind();
+
+        if (current == null)
+            return;
+
+        boundManager = current;
+        boundManager.OnObjectiveChanged += Refresh;
+        Debug.Log("[ObjectiveUI] Bound to ObjectiveManager '" + current.gameObject.name
+            + "'. Showing: " + current.GetDisplayText(), this);
+    }
+
+    void Unbind()
+    {
+        if (boundManager != null)
+            boundManager.OnObjectiveChanged -= Refresh;
+
+        boundManager = null;
     }
 
     void Refresh()
     {
-        if (objectiveText == null) return;
+        if (objectiveText == null)
+            objectiveText = GetComponent<TextMeshProUGUI>();
 
-        if (ObjectiveManager.Instance == null)
+        if (objectiveText == null)
+            return;
+
+        ObjectiveManager manager = boundManager != null ? boundManager : ObjectiveManager.Instance;
+        if (manager == null)
+            manager = FindObjectOfType<ObjectiveManager>();
+
+        if (manager == null)
         {
+            if (lastLoggedText != "__none__")
+            {
+                lastLoggedText = "__none__";
+                Debug.LogWarning("[ObjectiveUI] No ObjectiveManager found in this scene. UI will stay empty unless No Objective Text is set.", this);
+            }
+
             objectiveText.text = noObjectiveText;
             return;
         }
 
-        objectiveText.text = ObjectiveManager.Instance.GetDisplayText();
+        string display = manager.GetDisplayText();
+        objectiveText.text = display;
+
+        if (display != lastLoggedText)
+        {
+            lastLoggedText = display;
+            Debug.Log("[ObjectiveUI] Text updated -> " + display, this);
+        }
     }
 }

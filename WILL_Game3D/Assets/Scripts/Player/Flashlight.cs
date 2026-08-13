@@ -6,29 +6,59 @@ public class Flashlight : MonoBehaviour
     public GameObject OFF;
     bool isON;
 
+    public bool IsOn => isON;
+
+    void Awake()
+    {
+        FixInvalidColliders();
+    }
+
     private void Start()
     {
-        ON.SetActive(false);
-        OFF.SetActive(true);
+        FixInvalidColliders();
+
+        if (ON != null) ON.SetActive(false);
+        if (OFF != null) OFF.SetActive(true);
         isON = false;
     }
 
     public void Update()
     {
+        if (PauseMenu.IsPaused)
+            return;
+
         if (Input.GetKeyDown(KeyCode.F))
         {
             if (isON)
             {
-                ON.SetActive(false);
-                OFF.SetActive(true);
+                if (ON != null) ON.SetActive(false);
+                if (OFF != null) OFF.SetActive(true);
             }
-            if (!isON)
+            else
             {
-                ON.SetActive(true);
-                OFF.SetActive(false);
+                if (ON != null) ON.SetActive(true);
+                if (OFF != null) OFF.SetActive(false);
             }
 
             isON = !isON;
+        }
+    }
+
+    void FixInvalidColliders()
+    {
+        MeshCollider[] meshColliders = GetComponentsInChildren<MeshCollider>(true);
+        for (int i = 0; i < meshColliders.Length; i++)
+        {
+            MeshCollider meshCol = meshColliders[i];
+            Rigidbody rb = meshCol.GetComponent<Rigidbody>();
+            if (rb == null)
+                rb = meshCol.GetComponentInParent<Rigidbody>();
+
+            if (rb != null && !rb.isKinematic && !meshCol.convex)
+            {
+                meshCol.enabled = false;
+                Destroy(meshCol);
+            }
         }
     }
 }

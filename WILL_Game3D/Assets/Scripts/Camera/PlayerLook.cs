@@ -48,12 +48,12 @@ public class PlayerLook : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.IsPaused)
+            return;
+
         // 1. Dialogue Lock - Stop looking around if talking
         if (DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
         {
-            // Optional: Unlock cursor during dialogue
-            // Cursor.lockState = CursorLockMode.None;
-            // Cursor.visible = true;
             return;
         }
 

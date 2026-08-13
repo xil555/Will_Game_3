@@ -29,6 +29,8 @@ public class BatteryPickup : MonoBehaviour
 
         if (ObjectiveManager.Instance != null)
             ObjectiveManager.Instance.ReportBatteryCollected(1);
+        else
+            Debug.LogWarning("[Objective] Battery picked up but no ObjectiveManager exists in this scene.");
 
         if (EventDebugManager.Instance != null)
             EventDebugManager.Instance.TriggerEvent("Battery pickup event triggered! +" + batteryAmount);

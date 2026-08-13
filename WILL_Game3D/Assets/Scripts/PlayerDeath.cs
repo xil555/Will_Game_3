@@ -26,4 +26,9 @@ public class PlayerDeath : MonoBehaviour
         // Load the scene
         SceneManager.LoadScene(deathSceneName);
     }
+
+    public void Kill()
+    {
+        TriggerDeath();
+    }
 }

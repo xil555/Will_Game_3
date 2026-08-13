@@ -11677,11 +11677,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveManager
   objectives:
-  - displayText: Collect batteries
+  - displayText: Find and talk to the strange man
+    type: 3
+    targetAmount: 1
+    triggerId: TutorialNPC
+  - displayText: Objective: Collect Batteries ({current}/{target})
     type: 0
-    targetAmount: 2
+    targetAmount: 3
     triggerId: 
-  allCompleteText: All objectives complete!
+  allCompleteText: Objective complete!
+  batteryObjectiveFormat: Objective: Collect Batteries ({current}/{target})
+  keyObjectiveFormat: Objective: Collect Keys ({current}/{target})
 --- !u!4 &1307441771
 Transform:
   m_ObjectHideFlags: 0

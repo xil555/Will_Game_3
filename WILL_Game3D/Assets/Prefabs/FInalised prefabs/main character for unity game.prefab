@@ -1225,6 +1225,23 @@ MonoBehaviour:
   staminaDrainRate: 25
   staminaRegenRate: 12
   staminaRegenDelay: 1.5
+  groundCheckDistance: 0.35
+  maxSlopeAngle: 50
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  gravity: 30
+  groundSnapSpeed: 6
+  terminalVelocity: 55
+  playerCamera: {fileID: 878091939082644936}
+  bobFrequency: 1.6
+  bobAmount: 0.06
+  smoothness: 12
+  idleBobAmount: 0.012
+  idleBobFrequency: 0.7
+  walkBobMultiplier: 1
+  sprintBobMultiplier: 1.75
+  sprintFrequencyMultiplier: 1.45
 --- !u!95 &5717341480923513976
 Animator:
   serializedVersion: 7

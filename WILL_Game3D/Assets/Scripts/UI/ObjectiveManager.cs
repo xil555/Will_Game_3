@@ -6,21 +6,23 @@ public enum ObjectiveType
 {
     CollectBatteries,
     CollectKeys,
-    ReachTrigger
+    ReachTrigger,
+    TalkToNpc
 }
 
 [Serializable]
 public class ObjectiveData
 {
-    [Tooltip("Shown on screen. For collect types use {current} and {target}, e.g. Collect batteries: {current}/{target}")]
-    public string displayText = "New Objective";
+    [Tooltip("Shown on screen. Use {current} and {target} for collect types, e.g. Objective: Collect Batteries ({current}/{target})")]
+    public string displayText = "Objective: Collect Batteries ({current}/{target})";
 
-    public ObjectiveType type = ObjectiveType.ReachTrigger;
+    public ObjectiveType type = ObjectiveType.CollectBatteries;
 
     [Tooltip("How many pickups are needed. Ignored for ReachTrigger.")]
-    public int targetAmount = 1;
+    [Min(1)]
+    public int targetAmount = 3;
 
-    [Tooltip("Must match the Trigger Id on an ObjectiveTrigger in the scene. Only used for ReachTrigger.")]
+    [Tooltip("For ReachTrigger: match ObjectiveTrigger. For TalkToNpc: match the NPC's npcID (e.g. TutorialNPC).")]
     public string triggerId = "";
 }
 
@@ -37,7 +39,12 @@ public class ObjectiveManager : MonoBehaviour
     public List<ObjectiveData> objectives = new List<ObjectiveData>();
 
     [Header("Completion")]
-    public string allCompleteText = "All objectives complete!";
+    public string allCompleteText = "Objective complete!";
+    public string batteryObjectiveFormat = "Objective: Collect Batteries ({current}/{target})";
+    public string keyObjectiveFormat = "Objective: Collect Keys ({current}/{target})";
+
+    [Header("Debug")]
+    public bool debugLogs = true;
 
     public event Action OnObjectiveChanged;
 
@@ -59,6 +66,7 @@ public class ObjectiveManager : MonoBehaviour
         }
 
         Instance = this;
+        Log("ObjectiveManager is running on " + gameObject.name);
     }
 
     void OnDestroy()
@@ -72,6 +80,12 @@ public class ObjectiveManager : MonoBehaviour
         currentIndex = 0;
         currentProgress = 0;
         allComplete = objectives == null || objectives.Count == 0;
+
+        if (allComplete)
+            Log("No objectives in the list — UI will show the complete text.");
+        else
+            Log("Started. Objective 0/" + objectives.Count + " -> " + GetDisplayText());
+
         NotifyChanged();
     }
 
@@ -81,46 +95,91 @@ public class ObjectiveManager : MonoBehaviour
             return allCompleteText;
 
         ObjectiveData objective = objectives[currentIndex];
-        string text = objective.displayText;
+        return FormatObjectiveText(objective, currentProgress);
+    }
 
-        if (objective.type == ObjectiveType.CollectBatteries || objective.type == ObjectiveType.CollectKeys)
+    string FormatObjectiveText(ObjectiveData objective, int progress)
+    {
+        int target = Mathf.Max(1, objective.targetAmount);
+        int current = Mathf.Clamp(progress, 0, target);
+        string template = objective.displayText;
+
+        bool isCollect = objective.type == ObjectiveType.CollectBatteries
+                      || objective.type == ObjectiveType.CollectKeys;
+
+        if (isCollect && (string.IsNullOrWhiteSpace(template) || !HasProgressPlaceholders(template)))
         {
-            string progress = currentProgress + "/" + objective.targetAmount;
+            string fallback = objective.type == ObjectiveType.CollectKeys
+                ? keyObjectiveFormat
+                : batteryObjectiveFormat;
 
-            if (text.Contains("{current}") || text.Contains("{target}"))
+            if (string.IsNullOrWhiteSpace(fallback) || !HasProgressPlaceholders(fallback))
             {
-                text = text
-                    .Replace("{current}", currentProgress.ToString())
-                    .Replace("{target}", objective.targetAmount.ToString());
+                fallback = objective.type == ObjectiveType.CollectKeys
+                    ? "Objective: Collect Keys ({current}/{target})"
+                    : "Objective: Collect Batteries ({current}/{target})";
             }
-            else
-            {
-                // Always show progress even if the designer didn't add placeholders
-                text = text + " (" + progress + ")";
-            }
+
+            template = fallback;
         }
 
-        return text;
+        if (isCollect)
+        {
+            return template
+                .Replace("{current}", current.ToString())
+                .Replace("{target}", target.ToString());
+        }
+
+        return template;
+    }
+
+    static bool HasProgressPlaceholders(string text)
+    {
+        return text.Contains("{current}") || text.Contains("{target}");
     }
 
     public void ReportBatteryCollected(int amount = 1)
     {
-        if (!HasActiveObjective) return;
-        if (CurrentObjective.type != ObjectiveType.CollectBatteries) return;
+        Log("Battery collected reported.");
+
+        if (!HasActiveObjective)
+        {
+            Log("Ignored battery — no active objective.");
+            return;
+        }
+
+        if (CurrentObjective.type != ObjectiveType.CollectBatteries)
+        {
+            Log("Ignored battery — current objective is " + CurrentObjective.type + ", not CollectBatteries.");
+            return;
+        }
 
         AddProgress(amount);
     }
 
     public void ReportKeyCollected(int amount = 1)
     {
-        if (!HasActiveObjective) return;
-        if (CurrentObjective.type != ObjectiveType.CollectKeys) return;
+        Log("Key collected reported.");
+
+        if (!HasActiveObjective)
+        {
+            Log("Ignored key — no active objective.");
+            return;
+        }
+
+        if (CurrentObjective.type != ObjectiveType.CollectKeys)
+        {
+            Log("Ignored key — current objective is " + CurrentObjective.type + ", not CollectKeys.");
+            return;
+        }
 
         AddProgress(amount);
     }
 
     public void ReportTriggerReached(string triggerId)
     {
+        Log("Trigger reached: " + triggerId);
+
         if (!HasActiveObjective) return;
         if (CurrentObjective.type != ObjectiveType.ReachTrigger) return;
         if (string.IsNullOrEmpty(triggerId)) return;
@@ -130,9 +189,38 @@ public class ObjectiveManager : MonoBehaviour
         CompleteCurrentObjective();
     }
 
+    public void ReportNpcTalked(string npcId)
+    {
+        Log("NPC talked reported: " + npcId);
+
+        if (!HasActiveObjective)
+        {
+            Log("Ignored NPC talk — no active objective.");
+            return;
+        }
+
+        if (CurrentObjective.type != ObjectiveType.TalkToNpc)
+        {
+            Log("Ignored NPC talk — current objective is " + CurrentObjective.type + ", not TalkToNpc.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(npcId)) return;
+
+        if (!string.IsNullOrEmpty(CurrentObjective.triggerId)
+            && !string.Equals(CurrentObjective.triggerId, npcId, StringComparison.OrdinalIgnoreCase))
+        {
+            Log("Ignored NPC talk — expected Trigger Id '" + CurrentObjective.triggerId + "' but got '" + npcId + "'.");
+            return;
+        }
+
+        CompleteCurrentObjective();
+    }
+
     void AddProgress(int amount)
     {
         currentProgress += amount;
+        Log("Progress " + currentProgress + "/" + CurrentObjective.targetAmount + " on '" + GetDisplayText() + "'");
         NotifyChanged();
 
         if (currentProgress >= CurrentObjective.targetAmount)
@@ -141,6 +229,8 @@ public class ObjectiveManager : MonoBehaviour
 
     void CompleteCurrentObjective()
     {
+        Log("Completed: " + CurrentObjective.displayText);
+
         if (EventDebugManager.Instance != null)
             EventDebugManager.Instance.TriggerEvent("Objective complete: " + CurrentObjective.displayText);
 
@@ -148,7 +238,14 @@ public class ObjectiveManager : MonoBehaviour
         currentProgress = 0;
 
         if (currentIndex >= objectives.Count)
+        {
             allComplete = true;
+            Log("All objectives complete.");
+        }
+        else
+        {
+            Log("Next objective " + currentIndex + "/" + objectives.Count + " -> " + GetDisplayText());
+        }
 
         NotifyChanged();
     }
@@ -156,5 +253,11 @@ public class ObjectiveManager : MonoBehaviour
     void NotifyChanged()
     {
         OnObjectiveChanged?.Invoke();
+    }
+
+    void Log(string message)
+    {
+        if (!debugLogs) return;
+        Debug.Log("[Objective] " + message, this);
     }
 }
