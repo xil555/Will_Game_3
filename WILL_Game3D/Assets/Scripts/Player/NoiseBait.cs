@@ -30,7 +30,7 @@ public class NoiseBait : MonoBehaviour
 
     void Update()
     {
-        if (used || PauseMenu.IsPaused)
+        if (used || PauseMenu.IsPaused || PlayerDeath.IsDead)
             return;
 
         if (player == null)

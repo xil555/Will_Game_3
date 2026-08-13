@@ -35,7 +35,10 @@ public class PlayerLook : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Re-lock cursor whenever the player lands in a new scene
+        string sceneName = scene.name.Replace('\u00A0', ' ');
+        if (sceneName == "Game Over" || sceneName == "MainMenu" || sceneName == "LobbySystem" || sceneName == "CreditMenu")
+            return;
+
         LockCursor();
         verticalRotation = 0f;
     }
@@ -48,7 +51,7 @@ public class PlayerLook : MonoBehaviour
 
     void Update()
     {
-        if (PauseMenu.IsPaused)
+        if (PauseMenu.IsPaused || PlayerDeath.IsDead)
             return;
 
         // 1. Dialogue Lock - Stop looking around if talking

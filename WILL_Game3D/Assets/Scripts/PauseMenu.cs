@@ -53,6 +53,9 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        if (PlayerDeath.IsDead)
+            return;
+
         if (!Input.GetKeyDown(KeyCode.Escape))
             return;
 
@@ -70,6 +73,7 @@ public class PauseMenu : MonoBehaviour
     public void MainMenuButton()
     {
         Resume();
+        PersistentPlayer.Release();
         SceneManager.LoadScene("MainMenu");
     }
 

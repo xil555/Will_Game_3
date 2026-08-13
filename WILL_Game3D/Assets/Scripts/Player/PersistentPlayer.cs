@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Add this to the root of the player prefab.
@@ -20,5 +21,22 @@ public class PersistentPlayer : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    /// <summary>
+    /// Drop persistence so the player is destroyed with the current scene
+    /// (Game Over / Main Menu) instead of leaking into UI scenes.
+    /// </summary>
+    public static void Release()
+    {
+        if (Instance == null)
+            return;
+
+        GameObject go = Instance.gameObject;
+        Instance = null;
+
+        Scene scene = SceneManager.GetActiveScene();
+        if (go.scene != scene)
+            SceneManager.MoveGameObjectToScene(go, scene);
     }
 }

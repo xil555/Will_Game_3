@@ -46,7 +46,7 @@ public class HideSpot : MonoBehaviour
 
     void Update()
     {
-        if (PauseMenu.IsPaused)
+        if (PauseMenu.IsPaused || PlayerDeath.IsDead)
             return;
 
         PlayerStealth stealth = PlayerStealth.Instance;

@@ -27,6 +27,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenMainMenu()
     {
+        PersistentPlayer.Release();
         SceneManager.LoadScene("MainMenu");
     }
     

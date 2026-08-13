@@ -43,6 +43,14 @@ public class PlayerMovement : MonoBehaviour
     public float sprintBobMultiplier = 1.75f;
     public float sprintFrequencyMultiplier = 1.45f;
 
+    [Header("Hide Proximity Shake")]
+    [Tooltip("Camera shake starts when a hunting/searching enemy is within this distance while hidden.")]
+    public float hideShakeRange = 14f;
+    public float hideShakeAmount = 0.07f;
+    public float hideShakeFrequency = 16f;
+    [Tooltip("Extra shake multiplier if the enemy is actively chasing.")]
+    public float hideChaseShakeMultiplier = 1.6f;
+
     private Rigidbody rb;
     private Animator animator;
     private PlayerStats playerStats;
@@ -63,6 +71,9 @@ public class PlayerMovement : MonoBehaviour
     private float bobTimer;
     private bool cameraRestCaptured;
     private float sprintNoiseTimer;
+    private Vector3 hideShakeOffset;
+    private EnemyAI[] cachedEnemies;
+    private float enemyCacheTimer;
 
     public bool IsGrounded => isGrounded;
     public bool IsSprinting => isSprinting;
@@ -88,11 +99,13 @@ public class PlayerMovement : MonoBehaviour
             gameObject.AddComponent<PlayerStealth>();
         if (GetComponent<DistractThrow>() == null)
             gameObject.AddComponent<DistractThrow>();
+        if (GetComponent<PlayerDeath>() == null)
+            gameObject.AddComponent<PlayerDeath>();
     }
 
     void Update()
     {
-        if (PauseMenu.IsPaused)
+        if (PauseMenu.IsPaused || PlayerDeath.IsDead)
             return;
 
         if (PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden)
@@ -129,12 +142,18 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (PlayerDeath.IsDead)
+            return;
+
         CheckGrounded();
         MoveRelative();
     }
 
     void LateUpdate()
     {
+        if (PlayerDeath.IsDead)
+            return;
+
         ApplyHeadBob();
     }
 
@@ -349,6 +368,8 @@ public class PlayerMovement : MonoBehaviour
         float freq;
         float amp;
 
+        bool hidden = PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden;
+
         if (walking)
         {
             freq = bobFrequency * (isSprinting ? sprintFrequencyMultiplier : 1f);
@@ -357,7 +378,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             freq = idleBobFrequency;
-            amp = dialogueLock ? 0f : idleBobAmount;
+            amp = (dialogueLock || hidden) ? 0f : idleBobAmount;
         }
 
         bobTimer += Time.deltaTime * freq * Mathf.PI * 2f;
@@ -379,7 +400,58 @@ public class PlayerMovement : MonoBehaviour
         }
 
         currentBobOffset = Vector3.Lerp(currentBobOffset, targetOffset, smoothness * Time.deltaTime);
-        playerCamera.localPosition = cameraRestLocalPos + currentBobOffset;
+        hideShakeOffset = Vector3.Lerp(hideShakeOffset, GetHideProximityShake(), smoothness * Time.deltaTime);
+        playerCamera.localPosition = cameraRestLocalPos + currentBobOffset + hideShakeOffset;
+    }
+
+    Vector3 GetHideProximityShake()
+    {
+        if (PlayerStealth.Instance == null || !PlayerStealth.Instance.IsHidden)
+            return Vector3.zero;
+
+        enemyCacheTimer -= Time.deltaTime;
+        if (cachedEnemies == null || enemyCacheTimer <= 0f)
+        {
+#if UNITY_6000_0_OR_NEWER
+            cachedEnemies = FindObjectsByType<EnemyAI>(FindObjectsSortMode.None);
+#else
+            cachedEnemies = FindObjectsOfType<EnemyAI>();
+#endif
+            enemyCacheTimer = 0.25f;
+        }
+
+        float closest = float.MaxValue;
+        float huntBoost = 1f;
+
+        for (int i = 0; i < cachedEnemies.Length; i++)
+        {
+            EnemyAI enemy = cachedEnemies[i];
+            if (enemy == null)
+                continue;
+
+            float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (dist >= closest)
+                continue;
+
+            closest = dist;
+            bool hunting = enemy.CurrentState == EnemyState.Pursue
+                        || enemy.CurrentState == EnemyState.Search
+                        || enemy.CurrentState == EnemyState.Investigate
+                        || enemy.CurrentState == EnemyState.Attack;
+            huntBoost = hunting ? hideChaseShakeMultiplier : 1f;
+        }
+
+        if (closest > hideShakeRange)
+            return Vector3.zero;
+
+        float intensity = Mathf.Clamp01(1f - closest / hideShakeRange) * huntBoost;
+
+        float t = Time.time * hideShakeFrequency;
+        return new Vector3(
+            (Mathf.PerlinNoise(t, 0.13f) - 0.5f) * 2f,
+            (Mathf.PerlinNoise(0.41f, t) - 0.5f) * 2f,
+            0f
+        ) * hideShakeAmount * intensity;
     }
 
     void ResolveCamera()

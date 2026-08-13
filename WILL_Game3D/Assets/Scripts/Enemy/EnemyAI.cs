@@ -166,6 +166,15 @@ public class EnemyAI : MonoBehaviour
         if (agent == null || !agent.isOnNavMesh)
             return;
 
+        if (killedPlayer || PlayerDeath.IsDead)
+        {
+            if (agent.isOnNavMesh)
+                agent.isStopped = true;
+            FacePoint(player != null ? player.position : lastKnownPosition);
+            UpdateAnimator();
+            return;
+        }
+
         ResolvePlayer();
         SamplePlayerVelocity();
         UpdatePerception();
@@ -829,10 +838,12 @@ public class EnemyAI : MonoBehaviour
             EventDebugManager.Instance.TriggerEvent("Enemy caught the player");
 
         PlayerDeath death = player != null ? player.GetComponent<PlayerDeath>() : null;
+        if (death == null && player != null)
+            death = player.gameObject.AddComponent<PlayerDeath>();
         if (death == null)
             death = FindObjectOfType<PlayerDeath>();
         if (death != null)
-            death.Kill();
+            death.Kill(transform);
     }
 
     void ResolvePlayer()

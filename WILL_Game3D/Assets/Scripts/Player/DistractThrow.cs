@@ -17,7 +17,7 @@ public class DistractThrow : MonoBehaviour
 
     void Update()
     {
-        if (PauseMenu.IsPaused)
+        if (PauseMenu.IsPaused || PlayerDeath.IsDead)
             return;
         if (PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden)
             return;

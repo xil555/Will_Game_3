@@ -24,7 +24,7 @@ public class Flashlight : MonoBehaviour
 
     public void Update()
     {
-        if (PauseMenu.IsPaused)
+        if (PauseMenu.IsPaused || PlayerDeath.IsDead)
             return;
 
         if (Input.GetKeyDown(KeyCode.F))
