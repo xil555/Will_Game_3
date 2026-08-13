@@ -3,16 +3,17 @@
     {
       "id": "TutorialNPC",
       "lines": [
-        "Welcome to the tutorial",
-        "its dangerous walking alone at night",
-        "Find the batteries and keys and use your flashlight to find your way home.",
-        "After u have collected 60% battery life and all the keys go past the old man and head to the next guy"
+        "Welcome to the tutorial.",
+        "It's dangerous walking alone at night.",
+        "Find 3 batteries and use your flashlight to see.",
+        "Stay quiet, hide if you hear something, and come back to me when you have them."
       ]
     },
     {
       "id": "FinishTutorialNPC",
       "lines": [
-        "Congratulations on finishing the tutorial, now you can start the game and find your way home"
+        "You made it. The tutorial is over.",
+        "Head back to the lobby and pick a difficulty. Don't get caught."
       ]
     },
     {

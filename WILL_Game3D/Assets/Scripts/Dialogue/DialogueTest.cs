@@ -1,119 +1,181 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class DialogueTest : MonoBehaviour
 {
     [Header("Dialogue Settings")]
-    [SerializeField] private string npcID = "TutorialNPC"; 
+    [SerializeField] private string npcID = "TutorialNPC";
+    [SerializeField] private string finishDialogueId = "FinishTutorialNPC";
+    [SerializeField] private string nextSceneName = "LobbySystem";
 
     [Header("Ranges")]
-    [SerializeField] private SphereCollider outerRange; 
-    [SerializeField] private SphereCollider innerRange; 
+    [SerializeField] private SphereCollider outerRange;
+    [SerializeField] private SphereCollider innerRange;
 
-    PlayerStats playerStats; 
+    PlayerStats playerStats;
+    bool playerInInnerRange;
+    bool finishing;
 
-    private bool playerInInnerRange = false;
-
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player"))
+            return;
 
-        // Using your IsFromCollider helper
-        if (IsFromCollider(outerRange, other))
-        {
+        if (IsFromCollider(outerRange, other) && EventDebugManager.Instance != null)
             EventDebugManager.Instance.TriggerEvent("NPC: 'Hey! Come here!'");
-        }
 
         if (IsFromCollider(innerRange, other))
         {
             playerInInnerRange = true;
-            EventDebugManager.Instance.TriggerEvent("Press E to Talk");
+            if (EventDebugManager.Instance != null)
+                EventDebugManager.Instance.TriggerEvent("Press E to Talk");
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player"))
+            return;
 
         if (IsFromCollider(innerRange, other))
-        {
-            playerInInnerRange = false; 
-        }
+            playerInInnerRange = false;
     }
 
-    private void Start()
+    void Start()
     {
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-
-        if (playerObject != null)
-        {
-            playerStats = playerObject.GetComponent<PlayerStats>();
-        }
-
+        ResolvePlayer();
         if (playerStats == null)
-        {
             Debug.LogWarning("DialogueTest: Could not find PlayerStats on the Player object. Will retry each frame.");
-        }
     }
 
-    private void Update()
+    void Update()
     {
-        // Retry finding the player if it was spawned after this object started
+        if (PauseMenu.IsPaused || PlayerDeath.IsDead)
+            return;
+
         if (playerStats == null)
-        {
-            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-            if (playerObject != null)
-                playerStats = playerObject.GetComponent<PlayerStats>();
-        }
+            ResolvePlayer();
 
-        if (playerInInnerRange && Input.GetKeyDown(KeyCode.E))
-        {
-            if (playerStats != null && playerStats.battery >= 60 && playerStats.keys >= 3)
-            {
-                DialogueManager.Instance.StartDialogue("FinishTutorialNPC");
-                StartCoroutine(WaitAndLoadLevel());
-            }
-            else
-            {
-                Interact();
-            }
-        }
+        RefreshInsideRange();
+
+        if (!playerInInnerRange || !Input.GetKeyDown(KeyCode.E))
+            return;
+
+        if (finishing || IsReadyToFinishTutorial())
+            ContinueFinishTalk();
+        else
+            Interact();
     }
 
-    private void Interact()
+    void Interact()
     {
-        
+        if (DialogueManager.Instance == null)
+            return;
+
         if (DialogueManager.Instance.IsActive())
         {
             DialogueManager.Instance.DisplayNextSentence();
+            return;
         }
-        else
-        {
-            DialogueManager.Instance.StartDialogue(npcID);
-            Debug.Log("[Objective] Started dialogue with NPC '" + npcID + "'");
 
-            if (ObjectiveManager.Instance != null)
-                ObjectiveManager.Instance.ReportNpcTalked(npcID);
-            else
-                Debug.LogWarning("[Objective] Talked to NPC but no ObjectiveManager exists in this scene.");
-        }
+        DialogueManager.Instance.StartDialogue(npcID);
+        Debug.Log("[Objective] Started dialogue with NPC '" + npcID + "'");
+
+        if (ObjectiveManager.Instance != null)
+            ObjectiveManager.Instance.ReportNpcTalked(npcID);
+        else
+            Debug.LogWarning("[Objective] Talked to NPC but no ObjectiveManager exists in this scene.");
     }
 
-    private bool IsFromCollider(SphereCollider sphere, Collider other)
+    void ContinueFinishTalk()
     {
-        
-        if (sphere == null) return false;
+        if (DialogueManager.Instance == null)
+            return;
+
+        if (DialogueManager.Instance.IsActive())
+        {
+            DialogueManager.Instance.DisplayNextSentence();
+            return;
+        }
+
+        if (finishing)
+            return;
+
+        finishing = true;
+        DialogueManager.Instance.StartDialogue(finishDialogueId);
+
+        if (ObjectiveManager.Instance != null)
+            ObjectiveManager.Instance.ReportNpcTalked(npcID);
+
+        StartCoroutine(WaitAndLoadLobby());
+    }
+
+    bool IsReadyToFinishTutorial()
+    {
+        ObjectiveManager objectives = ObjectiveManager.Instance;
+        if (objectives == null)
+            return playerStats != null && playerStats.batteriesCollected >= 3;
+
+        if (objectives.AllComplete)
+            return true;
+
+        ObjectiveData current = objectives.CurrentObjective;
+        return objectives.CurrentIndex > 0
+            && current != null
+            && current.type == ObjectiveType.TalkToNpc
+            && (string.IsNullOrEmpty(current.triggerId)
+                || string.Equals(current.triggerId, npcID, StringComparison.OrdinalIgnoreCase));
+    }
+
+    void RefreshInsideRange()
+    {
+        if (innerRange == null)
+            return;
+
+        if (playerStats == null)
+        {
+            playerInInnerRange = false;
+            return;
+        }
+
+        Vector3 playerPos = playerStats.transform.position;
+        playerInInnerRange = innerRange.bounds.Contains(playerPos)
+            || (innerRange.ClosestPoint(playerPos) - playerPos).sqrMagnitude < 0.05f * 0.05f;
+    }
+
+    void ResolvePlayer()
+    {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+            playerStats = playerObject.GetComponent<PlayerStats>();
+    }
+
+    bool IsFromCollider(SphereCollider sphere, Collider other)
+    {
+        if (sphere == null)
+            return false;
         return other.bounds.Intersects(sphere.bounds);
-    } 
+    }
 
-    IEnumerator WaitAndLoadLevel()
-{
-    Debug.Log("Second dialogue started. Loading Level1 in 10 seconds...");
+    IEnumerator WaitAndLoadLobby()
+    {
+        Debug.Log("[Objective] Tutorial finished. Returning to lobby.");
 
-    // Wait for 10 seconds
-    yield return new WaitForSeconds(3f);
+        float timeout = 10f;
+        while (timeout > 0f && DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
+        {
+            timeout -= Time.deltaTime;
+            yield return null;
+        }
 
-    SceneManager.LoadScene("Level1");
-}
+        yield return new WaitForSeconds(1.2f);
+
+        PersistentPlayer.Release();
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene(nextSceneName);
+    }
 }

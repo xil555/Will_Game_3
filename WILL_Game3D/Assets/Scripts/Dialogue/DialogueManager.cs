@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
-using TMPro; // Required for TextMeshPro
+using TMPro;
 using System.Collections;
 
 public class DialogueManager : MonoBehaviour
@@ -19,37 +20,70 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping = false;
     private string currentFullSentence;
 
-    private void Awake()
+    void Awake()
     {
+        if (Instance != null && Instance != this)
+            return;
+
         Instance = this;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
         LoadDialogueData();
-        dialoguePanel.SetActive(false); // Hide UI on start
+        RebindUiIfNeeded();
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        if (Instance == this)
+            Instance = null;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (Instance != this)
+            return;
+
+        StopAllCoroutines();
+        isDialogueActive = false;
+        isTyping = false;
+        sentenceQueue.Clear();
+        RebindUiIfNeeded();
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
     }
 
     void LoadDialogueData()
     {
         string path = Path.Combine(Application.streamingAssetsPath, "Dialogue.json");
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path);
-            DialogueData data = JsonUtility.FromJson<DialogueData>(json);
+        if (!File.Exists(path))
+            return;
 
-            foreach (var entry in data.conversations)
-            {
-                dialogueDatabase[entry.id] = entry.lines;
-            }
-        }
+        string json = File.ReadAllText(path);
+        DialogueData data = JsonUtility.FromJson<DialogueData>(json);
+
+        foreach (var entry in data.conversations)
+            dialogueDatabase[entry.id] = entry.lines;
     }
 
     public void StartDialogue(string dialogueId)
     {
-        if (!dialogueDatabase.ContainsKey(dialogueId) || isDialogueActive) return;
+        RebindUiIfNeeded();
+
+        if (!dialogueDatabase.ContainsKey(dialogueId) || isDialogueActive)
+            return;
+
+        if (dialoguePanel == null || dialogueText == null)
+        {
+            Debug.LogWarning("DialogueManager: Dialogue UI is missing in this scene.");
+            return;
+        }
 
         sentenceQueue.Clear();
         foreach (string line in dialogueDatabase[dialogueId])
-        {
             sentenceQueue.Enqueue(line);
-        }
 
         isDialogueActive = true;
         dialoguePanel.SetActive(true);
@@ -58,11 +92,11 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        // If still typing, finish the sentence instantly
         if (isTyping)
         {
             StopAllCoroutines();
-            dialogueText.text = currentFullSentence;
+            if (dialogueText != null)
+                dialogueText.text = currentFullSentence;
             isTyping = false;
             return;
         }
@@ -80,10 +114,13 @@ public class DialogueManager : MonoBehaviour
     IEnumerator TypeSentence(string sentence)
     {
         isTyping = true;
-        dialogueText.text = "";
+        if (dialogueText != null)
+            dialogueText.text = "";
+
         foreach (char letter in sentence.ToCharArray())
         {
-            dialogueText.text += letter;
+            if (dialogueText != null)
+                dialogueText.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
         isTyping = false;
@@ -92,9 +129,25 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue()
     {
         isDialogueActive = false;
-        dialoguePanel.SetActive(false);
-        EventDebugManager.Instance.TriggerEvent("--- Dialogue Ended ---");
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+        if (EventDebugManager.Instance != null)
+            EventDebugManager.Instance.TriggerEvent("--- Dialogue Ended ---");
     }
 
     public bool IsActive() => isDialogueActive;
+
+    void RebindUiIfNeeded()
+    {
+        if (dialoguePanel != null && dialogueText != null)
+            return;
+
+        GameObject panel = GameObject.Find("DialoguePanel");
+        if (panel == null)
+            return;
+
+        dialoguePanel = panel;
+        if (dialogueText == null)
+            dialogueText = panel.GetComponentInChildren<TextMeshProUGUI>(true);
+    }
 }

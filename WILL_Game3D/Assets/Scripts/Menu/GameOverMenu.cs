@@ -45,6 +45,7 @@ public class GameOverMenu : MonoBehaviour
             sceneName = "Easy";
 
         PersistentPlayer.Release();
+        PlayerDeath.ClearDeathState();
         Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName);
     }
@@ -52,6 +53,7 @@ public class GameOverMenu : MonoBehaviour
     public void OpenMainMenu()
     {
         PersistentPlayer.Release();
+        PlayerDeath.ClearDeathState();
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }

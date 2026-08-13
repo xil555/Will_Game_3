@@ -54,6 +54,7 @@ public class ObjectiveManager : MonoBehaviour
 
     public bool HasActiveObjective => !allComplete && currentIndex < objectives.Count;
     public ObjectiveData CurrentObjective => HasActiveObjective ? objectives[currentIndex] : null;
+    public int CurrentIndex => currentIndex;
     public int CurrentProgress => currentProgress;
     public bool AllComplete => allComplete;
 

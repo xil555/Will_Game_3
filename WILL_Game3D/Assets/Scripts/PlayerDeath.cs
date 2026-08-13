@@ -7,6 +7,11 @@ public class PlayerDeath : MonoBehaviour
     public static bool IsDead { get; private set; }
     public static string LastGameplayScene { get; private set; }
 
+    public static void ClearDeathState()
+    {
+        IsDead = false;
+    }
+
     [SerializeField] private string gameOverSceneName = "Game Over";
     [SerializeField] private float caughtHoldTime = 1.15f;
     [SerializeField] private AudioClip caughtClip;
