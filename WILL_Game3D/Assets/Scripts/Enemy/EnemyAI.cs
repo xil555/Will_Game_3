@@ -136,11 +136,13 @@ public class EnemyAI : MonoBehaviour
     void OnEnable()
     {
         NoiseEvent.OnEmitted += OnNoiseHeard;
+        PlayerStealth.OnHiddenChanged += OnPlayerHiddenChanged;
     }
 
     void OnDisable()
     {
         NoiseEvent.OnEmitted -= OnNoiseHeard;
+        PlayerStealth.OnHiddenChanged -= OnPlayerHiddenChanged;
     }
 
     void Start()
@@ -176,6 +178,9 @@ public class EnemyAI : MonoBehaviour
         }
 
         ResolvePlayer();
+        if (PlayerIsHidden)
+            HandlePlayerHidden();
+
         SamplePlayerVelocity();
         UpdatePerception();
         UpdateState();
@@ -189,9 +194,10 @@ public class EnemyAI : MonoBehaviour
 
     void SamplePlayerVelocity()
     {
-        if (player == null)
+        if (player == null || PlayerIsHidden)
         {
-            playerVelocity = Vector3.zero;
+            if (PlayerIsHidden)
+                playerVelocity = Vector3.zero;
             return;
         }
 
@@ -250,7 +256,7 @@ public class EnemyAI : MonoBehaviour
         if (player == null)
             return VisionBand.None;
 
-        if (PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden)
+        if (PlayerIsHidden)
             return VisionBand.None;
 
         Vector3 eye = EyePosition();
@@ -315,8 +321,18 @@ public class EnemyAI : MonoBehaviour
 
         if (CurrentState == EnemyState.Pursue || CurrentState == EnemyState.Attack)
         {
+            if (PlayerIsHidden)
+                return;
+
             SetDestinationThrottled(worldPosition, true);
             huntTimer = Mathf.Max(huntTimer, huntDuration * 0.45f);
+            return;
+        }
+
+        if (PlayerIsHidden)
+        {
+            if (AlertLevel >= investigateThreshold)
+                EnterState(EnemyState.Investigate);
             return;
         }
 
@@ -331,6 +347,49 @@ public class EnemyAI : MonoBehaviour
         lastKnownPosition = position;
         lastKnownVelocity = playerVelocity;
         hasLastKnown = true;
+    }
+
+    bool PlayerIsHidden => PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden;
+
+    void OnPlayerHiddenChanged(bool hidden)
+    {
+        if (hidden)
+            HandlePlayerHidden();
+    }
+
+    void HandlePlayerHidden()
+    {
+        currentVision = VisionBand.None;
+        if (CurrentState == EnemyState.Pursue || CurrentState == EnemyState.Attack)
+            LoseChaseBecauseHidden();
+    }
+
+    void LoseChaseBecauseHidden()
+    {
+        if (killedPlayer)
+            return;
+
+        currentVision = VisionBand.None;
+        freezePendingPursue = false;
+        huntTimer = 0f;
+        loseSightTimer = loseSightMemory + 1f;
+        lastKnownVelocity = Vector3.zero;
+        playerVelocity = Vector3.zero;
+
+        if (agent != null && agent.isOnNavMesh)
+        {
+            agent.isStopped = false;
+            agent.ResetPath();
+            agent.velocity = Vector3.zero;
+        }
+
+        if (debugLogs)
+            Debug.Log("[EnemyAI] Player hid. Cancelling chase.", this);
+
+        if (EventDebugManager.Instance != null)
+            EventDebugManager.Instance.TriggerEvent("Enemy lost the player.");
+
+        EnterState(EnemyState.Search);
     }
 
     #endregion
@@ -492,6 +551,12 @@ public class EnemyAI : MonoBehaviour
 
     void TickPursue()
     {
+        if (PlayerIsHidden)
+        {
+            LoseChaseBecauseHidden();
+            return;
+        }
+
         if (freezePendingPursue)
         {
             freezeTimer -= Time.deltaTime;
@@ -538,7 +603,7 @@ public class EnemyAI : MonoBehaviour
             EnterState(EnemyState.Search);
         }
 
-        if (player != null && Vector3.Distance(transform.position, player.position) <= killDistance)
+        if (player != null && !PlayerIsHidden && Vector3.Distance(transform.position, player.position) <= killDistance)
             EnterState(EnemyState.Attack);
     }
 
@@ -581,6 +646,12 @@ public class EnemyAI : MonoBehaviour
 
     void TickAttack()
     {
+        if (PlayerIsHidden)
+        {
+            LoseChaseBecauseHidden();
+            return;
+        }
+
         FacePoint(player != null ? player.position : lastKnownPosition);
         if (player != null && Vector3.Distance(transform.position, player.position) > killDistance * 1.6f)
             EnterState(EnemyState.Pursue);
@@ -612,6 +683,9 @@ public class EnemyAI : MonoBehaviour
 
     void BeginSpottedThenPursue()
     {
+        if (PlayerIsHidden)
+            return;
+
         if (CurrentState == EnemyState.Pursue && !freezePendingPursue)
             return;
 
@@ -818,7 +892,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (killedPlayer || player == null)
             return;
-        if (PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden)
+        if (PlayerIsHidden)
             return;
         if (Vector3.Distance(transform.position, player.position) > killDistance)
             return;

@@ -7,6 +7,8 @@ public class DialogueTest : MonoBehaviour
 {
     [Header("Dialogue Settings")]
     [SerializeField] private string npcID = "TutorialNPC";
+    [SerializeField] private string npcDisplayName = "";
+    [SerializeField] private string talkPrompt = "Press E to speak to {name}";
     [SerializeField] private string finishDialogueId = "FinishTutorialNPC";
     [SerializeField] private string nextSceneName = "LobbySystem";
 
@@ -29,8 +31,9 @@ public class DialogueTest : MonoBehaviour
         if (IsFromCollider(innerRange, other))
         {
             playerInInnerRange = true;
+            InteractPromptUI.Show(this, GetTalkPrompt());
             if (EventDebugManager.Instance != null)
-                EventDebugManager.Instance.TriggerEvent("Press E to Talk");
+                EventDebugManager.Instance.TriggerEvent(GetTalkPrompt());
         }
     }
 
@@ -40,7 +43,10 @@ public class DialogueTest : MonoBehaviour
             return;
 
         if (IsFromCollider(innerRange, other))
+        {
             playerInInnerRange = false;
+            InteractPromptUI.Hide(this);
+        }
     }
 
     void Start()
@@ -59,6 +65,7 @@ public class DialogueTest : MonoBehaviour
             ResolvePlayer();
 
         RefreshInsideRange();
+        UpdateTalkPrompt();
 
         if (!playerInInnerRange || !Input.GetKeyDown(KeyCode.E))
             return;
@@ -143,6 +150,37 @@ public class DialogueTest : MonoBehaviour
         Vector3 playerPos = playerStats.transform.position;
         playerInInnerRange = innerRange.bounds.Contains(playerPos)
             || (innerRange.ClosestPoint(playerPos) - playerPos).sqrMagnitude < 0.05f * 0.05f;
+    }
+
+    void UpdateTalkPrompt()
+    {
+        bool talking = DialogueManager.Instance != null && DialogueManager.Instance.IsActive();
+        if (playerInInnerRange && !talking && !finishing)
+            InteractPromptUI.Show(this, GetTalkPrompt());
+        else
+            InteractPromptUI.Hide(this);
+    }
+
+    string GetTalkPrompt()
+    {
+        string name = string.IsNullOrWhiteSpace(npcDisplayName) ? PrettyNpcName(npcID) : npcDisplayName;
+        if (string.IsNullOrWhiteSpace(talkPrompt))
+            return "Press E to speak to " + name;
+        return talkPrompt.Replace("{name}", name);
+    }
+
+    static string PrettyNpcName(string id)
+    {
+        if (string.Equals(id, "TutorialNPC", StringComparison.OrdinalIgnoreCase))
+            return "the strange man";
+        if (string.Equals(id, "OldMan", StringComparison.OrdinalIgnoreCase))
+            return "the old man";
+        return string.IsNullOrEmpty(id) ? "NPC" : id;
+    }
+
+    void OnDestroy()
+    {
+        InteractPromptUI.Hide(this);
     }
 
     void ResolvePlayer()

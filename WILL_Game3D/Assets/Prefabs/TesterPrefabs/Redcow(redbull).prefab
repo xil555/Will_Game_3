@@ -99,8 +99,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.069800965, y: 0.07537272, z: 0.103326574}
-  m_Center: {x: -0.00043982605, y: -0.0023060208, z: 0.044995863}
+  m_Size: {x: 0.22308205, y: 0.1727591, z: 0.103326574}
+  m_Center: {x: 0.0191125, y: -0.0021934113, z: 0.044995863}
 --- !u!114 &2338932156651112549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,3 +114,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
   batteryAmount: 30
+  pickupPrompt: Press E to pick up battery
+  showPickupIndicator: 1
+  indicatorOffset: {x: 0, y: 1.2, z: 0}
+  indicatorColor: {r: 1, g: 0.86, b: 0.2, a: 0.95}
+  indicatorPrefab: {fileID: 0}

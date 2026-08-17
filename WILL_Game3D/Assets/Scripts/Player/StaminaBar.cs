@@ -15,6 +15,7 @@ public class StaminaBar : MonoBehaviour
     public Image fillImage;
     public Color fullColor = new Color(0.2f, 0.85f, 0.2f);
     public Color emptyColor = new Color(0.85f, 0.15f, 0.15f);
+    public Color boostColor = new Color(0.25f, 0.95f, 1f);
 
     [Header("Settings")]
     [Tooltip("How quickly the bar visually catches up to the real value.")]
@@ -48,22 +49,29 @@ public class StaminaBar : MonoBehaviour
             return;
         }
 
-        float ratio = playerStats.stamina / playerStats.maxStamina;
+        float ratio = playerStats.maxStamina > 0.001f
+            ? playerStats.stamina / playerStats.maxStamina
+            : 0f;
 
         if (staminaSlider != null)
             staminaSlider.value = Mathf.Lerp(staminaSlider.value, ratio, smoothSpeed * Time.deltaTime);
 
         if (fillImage != null)
-            fillImage.color = Color.Lerp(emptyColor, fullColor, ratio);
+        {
+            Color target = playerStats.HasStaminaBoost
+                ? boostColor
+                : Color.Lerp(emptyColor, fullColor, ratio);
+            fillImage.color = Color.Lerp(fillImage.color, target, smoothSpeed * Time.deltaTime);
+        }
 
-        HandleVisibility(ratio);
+        HandleVisibility(ratio, playerStats.HasStaminaBoost);
     }
 
-    void HandleVisibility(float ratio)
+    void HandleVisibility(float ratio, bool boosted)
     {
         if (!hideWhenFull || canvasGroup == null) return;
 
-        if (ratio < 0.999f)
+        if (boosted || ratio < 0.999f)
         {
             hideTimer = hideDelay;
             canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, 1f, Time.deltaTime * 5f);

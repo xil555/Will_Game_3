@@ -4,19 +4,69 @@ public class BatteryPickup : MonoBehaviour
 {
     PlayerStats playerStats;
     public int batteryAmount = 30;
+    public string pickupPrompt = "Press E to pick up battery";
+
+    [Header("Pickup Indicator")]
+    public bool showPickupIndicator = true;
+    public Vector3 indicatorOffset = new Vector3(0f, 1.2f, 0f);
+    public Color indicatorColor = new Color(1f, 0.86f, 0.2f, 0.95f);
+    [Tooltip("Optional custom arrow prefab. Leave empty to use the default down-arrow.")]
+    public GameObject indicatorPrefab;
+    [Tooltip("How far away the player can be and still see the arrow.")]
+    public float indicatorVisibleRange = 40f;
+
+    PickupIndicator indicator;
+    bool playerInside;
 
     void Start()
     {
         playerStats = FindObjectOfType<PlayerStats>();
+        if (showPickupIndicator)
+            indicator = PickupIndicator.Ensure(transform, indicatorOffset, indicatorColor, indicatorPrefab, indicatorVisibleRange);
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player"))
+            return;
 
-        // Fallback: find PlayerStats on the colliding object directly
+        playerInside = true;
         if (playerStats == null)
-            playerStats = other.GetComponent<PlayerStats>();
+            playerStats = other.GetComponent<PlayerStats>() ?? other.GetComponentInParent<PlayerStats>();
+
+        InteractPromptUI.Show(this, pickupPrompt);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag("Player"))
+            return;
+
+        playerInside = false;
+        InteractPromptUI.Hide(this);
+    }
+
+    void Update()
+    {
+        if (!playerInside || PauseMenu.IsPaused || PlayerDeath.IsDead)
+            return;
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
+            return;
+        if (!Input.GetKeyDown(KeyCode.E))
+            return;
+
+        Collect();
+    }
+
+    void OnDestroy()
+    {
+        InteractPromptUI.Hide(this);
+    }
+
+    void Collect()
+    {
+        if (playerStats == null)
+            playerStats = FindObjectOfType<PlayerStats>();
 
         if (playerStats == null)
         {
@@ -34,6 +84,10 @@ public class BatteryPickup : MonoBehaviour
 
         if (EventDebugManager.Instance != null)
             EventDebugManager.Instance.TriggerEvent("Battery pickup event triggered! +" + batteryAmount);
+
+        InteractPromptUI.Hide(this);
+        if (indicator != null)
+            indicator.Hide();
 
         Destroy(gameObject);
     }

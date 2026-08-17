@@ -101,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
             gameObject.AddComponent<DistractThrow>();
         if (GetComponent<PlayerDeath>() == null)
             gameObject.AddComponent<PlayerDeath>();
+        InteractPromptUI.Ensure();
     }
 
     void Update()
@@ -145,6 +146,12 @@ public class PlayerMovement : MonoBehaviour
         if (PlayerDeath.IsDead)
             return;
 
+        if (PlayerStealth.Instance != null && PlayerStealth.Instance.IsHidden)
+        {
+            SetVelocity(Vector3.zero);
+            return;
+        }
+
         CheckGrounded();
         MoveRelative();
     }
@@ -161,6 +168,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (playerStats == null) return;
 
+        if (playerStats.StaminaRestoredFlag)
+        {
+            playerStats.StaminaRestoredFlag = false;
+            regenDelayTimer = 0f;
+            if (playerStats.stamina >= playerStats.maxStamina * 0.25f)
+                canSprint = true;
+        }
+
         bool wantsToSprint = Input.GetKey(KeyCode.LeftShift) && inputDirection.magnitude > 0;
 
         if (wantsToSprint && canSprint && playerStats.stamina > 0f)
@@ -168,7 +183,11 @@ public class PlayerMovement : MonoBehaviour
             isSprinting = true;
             regenDelayTimer = staminaRegenDelay;
 
-            playerStats.stamina -= staminaDrainRate * Time.deltaTime;
+            float drain = staminaDrainRate;
+            if (playerStats.StaminaDrainMultiplier > 0f)
+                drain *= playerStats.StaminaDrainMultiplier;
+
+            playerStats.stamina -= drain * Time.deltaTime;
             playerStats.stamina = Mathf.Max(playerStats.stamina, 0f);
 
             // Fully exhausted — stop sprint and lock it out until recovered
@@ -188,7 +207,11 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                playerStats.stamina += staminaRegenRate * Time.deltaTime;
+                float regen = staminaRegenRate;
+                if (playerStats.StaminaRegenMultiplier > 0f)
+                    regen *= playerStats.StaminaRegenMultiplier;
+
+                playerStats.stamina += regen * Time.deltaTime;
                 playerStats.stamina = Mathf.Min(playerStats.stamina, playerStats.maxStamina);
 
                 // Only allow sprinting again once 25% stamina is recovered
@@ -257,6 +280,8 @@ public class PlayerMovement : MonoBehaviour
         wishDir = SlideOffWalls(wishDir);
 
         float activeSpeed = isSprinting ? sprintSpeed : moveSpeed;
+        if (playerStats != null)
+            activeSpeed *= playerStats.SprintSpeedMultiplier;
         Vector3 targetVelocity = wishDir * activeSpeed;
 
         float currentStep = inputDirection.sqrMagnitude > 0f ? acceleration : deceleration;

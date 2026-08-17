@@ -6795,6 +6795,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueTest
   npcID: OldMan
+  finishDialogueId: FinishTutorialNPC
+  nextSceneName: LobbySystem
   outerRange: {fileID: 856634221}
   innerRange: {fileID: 856634220}
 --- !u!1 &863144032
@@ -8814,7 +8816,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fca2ade048029a46b12d428b167d55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
-  deathSceneName: MainMenu
+  gameOverSceneName: Game Over
+  caughtHoldTime: 1.15
+  caughtClip: {fileID: 0}
 --- !u!1001 &1057741133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11681,13 +11685,18 @@ MonoBehaviour:
     type: 3
     targetAmount: 1
     triggerId: TutorialNPC
-  - displayText: Objective: Collect Batteries ({current}/{target})
+  - displayText: Objective
+    type: 0
+    targetAmount: 3
+    triggerId: 
+  - displayText: 'Objective: Collect Batteries ({current}/{target})'
     type: 0
     targetAmount: 3
     triggerId: 
   allCompleteText: Objective complete!
-  batteryObjectiveFormat: Objective: Collect Batteries ({current}/{target})
-  keyObjectiveFormat: Objective: Collect Keys ({current}/{target})
+  batteryObjectiveFormat: 
+  keyObjectiveFormat: 
+  debugLogs: 1
 --- !u!4 &1307441771
 Transform:
   m_ObjectHideFlags: 0
@@ -14453,7 +14462,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1132343164505013605, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4663511893596850257, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14499,9 +14508,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: main character for unity game (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5472946633108230891, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7987050525052386987, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(100)]
 public class PlayerLook : MonoBehaviour
 {
     [Header("Settings")]
@@ -10,16 +11,17 @@ public class PlayerLook : MonoBehaviour
     [Header("References")]
     public Transform playerCamera;
 
-    private Rigidbody rb;
-    private float verticalRotation = 0f;
+    Rigidbody rb;
+    float yaw;
+    float pitch;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
         if (rb != null)
             rb.freezeRotation = true;
 
+        CaptureFacing();
         LockCursor();
     }
 
@@ -40,7 +42,20 @@ public class PlayerLook : MonoBehaviour
             return;
 
         LockCursor();
-        verticalRotation = 0f;
+        CaptureFacing();
+    }
+
+    void CaptureFacing()
+    {
+        yaw = transform.eulerAngles.y;
+        pitch = 0f;
+        if (playerCamera == null)
+            return;
+
+        float camPitch = playerCamera.localEulerAngles.x;
+        if (camPitch > 180f)
+            camPitch -= 360f;
+        pitch = Mathf.Clamp(camPitch, -upDownRange, upDownRange);
     }
 
     void LockCursor()
@@ -49,26 +64,29 @@ public class PlayerLook : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (PauseMenu.IsPaused || PlayerDeath.IsDead)
             return;
 
-        // 1. Dialogue Lock - Stop looking around if talking
         if (DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
-        {
             return;
-        }
 
-        // 2. Horizontal Rotation (Turning the whole body Left/Right)
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        transform.Rotate(Vector3.up * mouseX);
+        if (playerCamera == null)
+            return;
 
-        // 3. Vertical Rotation (Looking Up/Down with just the Camera)
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
-        verticalRotation -= mouseY;
-        verticalRotation = Mathf.Clamp(verticalRotation, -upDownRange, upDownRange);
-        
-        playerCamera.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+
+        yaw += mouseX;
+        pitch -= mouseY;
+        pitch = Mathf.Clamp(pitch, -upDownRange, upDownRange);
+
+        Quaternion bodyRot = Quaternion.Euler(0f, yaw, 0f);
+        transform.rotation = bodyRot;
+        if (rb != null)
+            rb.rotation = bodyRot;
+
+        playerCamera.localRotation = Quaternion.Euler(pitch, 0f, 0f);
     }
 }
