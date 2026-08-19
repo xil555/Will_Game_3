@@ -7,7 +7,8 @@ public enum ObjectiveType
     CollectBatteries,
     CollectKeys,
     ReachTrigger,
-    TalkToNpc
+    TalkToNpc,
+    CollectEnergyDrinks
 }
 
 [Serializable]
@@ -42,6 +43,7 @@ public class ObjectiveManager : MonoBehaviour
     public string allCompleteText = "Objective complete!";
     public string batteryObjectiveFormat = "Objective: Collect Batteries ({current}/{target})";
     public string keyObjectiveFormat = "Objective: Collect Keys ({current}/{target})";
+    public string energyDrinkObjectiveFormat = "Objective: Collect Energy Drinks ({current}/{target})";
 
     [Header("Debug")]
     public bool debugLogs = true;
@@ -106,19 +108,24 @@ public class ObjectiveManager : MonoBehaviour
         string template = objective.displayText;
 
         bool isCollect = objective.type == ObjectiveType.CollectBatteries
-                      || objective.type == ObjectiveType.CollectKeys;
+                      || objective.type == ObjectiveType.CollectKeys
+                      || objective.type == ObjectiveType.CollectEnergyDrinks;
 
         if (isCollect && (string.IsNullOrWhiteSpace(template) || !HasProgressPlaceholders(template)))
         {
             string fallback = objective.type == ObjectiveType.CollectKeys
                 ? keyObjectiveFormat
-                : batteryObjectiveFormat;
+                : (objective.type == ObjectiveType.CollectEnergyDrinks
+                    ? energyDrinkObjectiveFormat
+                    : batteryObjectiveFormat);
 
             if (string.IsNullOrWhiteSpace(fallback) || !HasProgressPlaceholders(fallback))
             {
                 fallback = objective.type == ObjectiveType.CollectKeys
                     ? "Objective: Collect Keys ({current}/{target})"
-                    : "Objective: Collect Batteries ({current}/{target})";
+                    : (objective.type == ObjectiveType.CollectEnergyDrinks
+                        ? "Objective: Collect Energy Drinks ({current}/{target})"
+                        : "Objective: Collect Batteries ({current}/{target})");
             }
 
             template = fallback;
@@ -171,6 +178,25 @@ public class ObjectiveManager : MonoBehaviour
         if (CurrentObjective.type != ObjectiveType.CollectKeys)
         {
             Log("Ignored key — current objective is " + CurrentObjective.type + ", not CollectKeys.");
+            return;
+        }
+
+        AddProgress(amount);
+    }
+
+    public void ReportEnergyDrinkCollected(int amount = 1)
+    {
+        Log("Energy drink collected reported.");
+
+        if (!HasActiveObjective)
+        {
+            Log("Ignored energy drink — no active objective.");
+            return;
+        }
+
+        if (CurrentObjective.type != ObjectiveType.CollectEnergyDrinks)
+        {
+            Log("Ignored energy drink — current objective is " + CurrentObjective.type + ", not CollectEnergyDrinks.");
             return;
         }
 

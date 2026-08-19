@@ -19,6 +19,7 @@ public class DialogueTest : MonoBehaviour
     PlayerStats playerStats;
     bool playerInInnerRange;
     bool finishing;
+    bool introTalkStarted;
 
     void OnTriggerEnter(Collider other)
     {
@@ -87,7 +88,11 @@ public class DialogueTest : MonoBehaviour
             return;
         }
 
+        if (introTalkStarted)
+            return;
+
         DialogueManager.Instance.StartDialogue(npcID);
+        introTalkStarted = true;
         Debug.Log("[Objective] Started dialogue with NPC '" + npcID + "'");
 
         if (ObjectiveManager.Instance != null)
@@ -121,19 +126,26 @@ public class DialogueTest : MonoBehaviour
 
     bool IsReadyToFinishTutorial()
     {
-        ObjectiveManager objectives = ObjectiveManager.Instance;
-        if (objectives == null)
-            return playerStats != null && playerStats.batteriesCollected >= 3;
+        if (!introTalkStarted)
+            return false;
 
-        if (objectives.AllComplete)
+        if (playerStats != null && playerStats.batteriesCollected >= 3)
             return true;
 
+        ObjectiveManager objectives = ObjectiveManager.Instance;
+        if (objectives == null)
+            return false;
+
+        if (objectives.AllComplete)
+            return playerStats != null && playerStats.batteriesCollected >= 3;
+
         ObjectiveData current = objectives.CurrentObjective;
-        return objectives.CurrentIndex > 0
-            && current != null
+        bool waitingForReturnTalk = current != null
             && current.type == ObjectiveType.TalkToNpc
             && (string.IsNullOrEmpty(current.triggerId)
                 || string.Equals(current.triggerId, npcID, StringComparison.OrdinalIgnoreCase));
+
+        return waitingForReturnTalk && playerStats != null && playerStats.batteriesCollected >= 3;
     }
 
     void RefreshInsideRange()

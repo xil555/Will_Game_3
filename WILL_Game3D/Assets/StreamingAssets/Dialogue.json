@@ -1,6 +1,15 @@
 {
   "conversations": [
     {
+      "id": "blocked_route_01",
+      "lines": [
+        "Wait... what?",
+        "Since when is there a block here?",
+        "This is my usual way home and I definitely can't get through like this.",
+        "Guess I need to find another way around."
+      ]
+    },
+    {
       "id": "TutorialNPC",
       "lines": [
         "Welcome to the tutorial.",
@@ -19,8 +28,59 @@
     {
       "id": "OldMan",
       "lines": [
-        "Hey there, you look like you could use some help",
-        "I have a quest for you, Dont get caught by the cops, they will take all youre stuff and put you in jail"
+        "Hey there, you look like you could use some help.",
+        "I have a quest for you. Don't get caught by the cops, they will take all your stuff and put you in jail."
+      ]
+    },
+    {
+      "id": "EasyStartNPC",
+      "lines": [
+        "You actually made it this far.",
+        "This is the easy route. The cheap way.",
+        "Don't get comfortable. This is the real world now.",
+        "Good luck getting home."
+      ]
+    },
+    {
+      "id": "EasyGrannyOutside",
+      "lines": [
+        "Jayden: Hey... sorry to bother you. I just need a bit of help.",
+        "My phone's dying. I need some batteries... and an energy drink. I'm exhausted.",
+        "Granny: Go on inside, love. Look around. Take what you need.",
+        "While you're at it... could you find my husband? He should be out in the garden.",
+        "Come back to me when you've got your things."
+      ]
+    },
+    {
+      "id": "EasyNewspaperThought",
+      "lines": [
+        "Local man reported missing after a neighbourhood dispute...",
+        "That was months ago. Why would she keep this?"
+      ]
+    },
+    {
+      "id": "EasyPhotoThought",
+      "lines": [
+        "That's her... and that's supposed to be her husband.",
+        "But why is his face  crossed out?"
+      ]
+    },
+    {
+      "id": "EasyGrave",
+      "lines": [
+        "Wait... what?",
+        "What the hell...",
+        "She killed him. That's a grave.",
+        "I need to get out of here."
+      ]
+    },
+    {
+      "id": "EasyGrannyConfront",
+      "lines": [
+        "Jayden:What was that out there? There's a grave. You killed him.",
+        "Granny: Ha... I forgot I did that.",
+        "I hope you got all your things, dear, you don't wanna end up next to him.",
+        "You should be going now. Home's still a long walk."
       ]
     }
   ]

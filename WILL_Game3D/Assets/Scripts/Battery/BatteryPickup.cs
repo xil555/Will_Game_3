@@ -6,6 +6,10 @@ public class BatteryPickup : MonoBehaviour
     public int batteryAmount = 30;
     public string pickupPrompt = "Press E to pick up battery";
 
+    [Header("Battery cap")]
+    [Tooltip("Max battery the player can hold. Should match Flashlight maxBattery.")]
+    public int maxBattery = 100;
+
     [Header("Pickup Indicator")]
     public bool showPickupIndicator = true;
     public Vector3 indicatorOffset = new Vector3(0f, 1.2f, 0f);
@@ -20,7 +24,7 @@ public class BatteryPickup : MonoBehaviour
 
     void Start()
     {
-        playerStats = FindObjectOfType<PlayerStats>();
+        playerStats = Object.FindAnyObjectByType<PlayerStats>();
         if (showPickupIndicator)
             indicator = PickupIndicator.Ensure(transform, indicatorOffset, indicatorColor, indicatorPrefab, indicatorVisibleRange);
     }
@@ -66,7 +70,7 @@ public class BatteryPickup : MonoBehaviour
     void Collect()
     {
         if (playerStats == null)
-            playerStats = FindObjectOfType<PlayerStats>();
+            playerStats = Object.FindAnyObjectByType<PlayerStats>();
 
         if (playerStats == null)
         {
@@ -74,7 +78,7 @@ public class BatteryPickup : MonoBehaviour
             return;
         }
 
-        playerStats.battery += batteryAmount;
+        playerStats.battery = Mathf.Min(playerStats.battery + batteryAmount, maxBattery);
         playerStats.batteriesCollected++;
 
         if (ObjectiveManager.Instance != null)

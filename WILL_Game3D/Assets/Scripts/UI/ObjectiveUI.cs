@@ -49,7 +49,7 @@ public class ObjectiveUI : MonoBehaviour
     {
         ObjectiveManager current = ObjectiveManager.Instance;
         if (current == null)
-            current = FindObjectOfType<ObjectiveManager>();
+            current = Object.FindAnyObjectByType<ObjectiveManager>();
 
         if (current == boundManager && !force)
             return;
@@ -83,7 +83,7 @@ public class ObjectiveUI : MonoBehaviour
 
         ObjectiveManager manager = boundManager != null ? boundManager : ObjectiveManager.Instance;
         if (manager == null)
-            manager = FindObjectOfType<ObjectiveManager>();
+            manager = Object.FindAnyObjectByType<ObjectiveManager>();
 
         if (manager == null)
         {
