@@ -89,6 +89,10 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Animation")]
     public float animatorDampTime = 0.12f;
+    [Tooltip("NavMesh speed above this plays Walk (when not chasing).")]
+    public float walkSpeedThreshold = 0.2f;
+    [Tooltip("NavMesh speed above this while chasing plays Run.")]
+    public float runSpeedThreshold = 0.35f;
 
     [Header("Debug")]
     public bool debugLogs = false;
@@ -125,6 +129,8 @@ public class EnemyAI : MonoBehaviour
 
     static readonly int SpeedHash = Animator.StringToHash("Speed");
     static readonly int IsChasingHash = Animator.StringToHash("IsChasing");
+    static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
+    static readonly int IsIdleHash = Animator.StringToHash("IsIdle");
 
     void Awake()
     {
@@ -264,7 +270,6 @@ public class EnemyAI : MonoBehaviour
         Vector3 toPlayer = target - eye;
         float distance = toPlayer.magnitude;
 
-        // Close enough to feel breath on their neck — no cone required, LOS still required.
         if (distance <= proximitySenseRange && HasLineOfSight(eye, target, distance))
         {
             seenPoint = player.position;
@@ -701,7 +706,7 @@ public class EnemyAI : MonoBehaviour
             SpottedFeedback.Instance.Play();
         else
         {
-            SpottedFeedback feedback = FindObjectOfType<SpottedFeedback>();
+            SpottedFeedback feedback = Object.FindFirstObjectByType<SpottedFeedback>();
             if (feedback != null)
                 feedback.Play();
         }
@@ -866,10 +871,22 @@ public class EnemyAI : MonoBehaviour
             return;
 
         float planar = agent != null ? new Vector3(agent.velocity.x, 0f, agent.velocity.z).magnitude : 0f;
+        bool atPlayer = CurrentState == EnemyState.Attack || killedPlayer;
+        bool chasing = CurrentState == EnemyState.Pursue && !freezePendingPursue && !atPlayer;
+
+        if (atPlayer || freezePendingPursue)
+            planar = 0f;
+
         animator.SetFloat(SpeedHash, planar, animatorDampTime, Time.deltaTime);
 
         if (HasAnimatorBool(IsChasingHash))
-            animator.SetBool(IsChasingHash, CurrentState == EnemyState.Pursue || CurrentState == EnemyState.Attack);
+            animator.SetBool(IsChasingHash, chasing);
+
+        if (HasAnimatorBool(IsMovingHash))
+            animator.SetBool(IsMovingHash, planar > walkSpeedThreshold && !atPlayer);
+
+        if (HasAnimatorBool(IsIdleHash))
+            animator.SetBool(IsIdleHash, atPlayer || planar <= walkSpeedThreshold);
     }
 
     bool HasAnimatorBool(int hash)
@@ -915,7 +932,7 @@ public class EnemyAI : MonoBehaviour
         if (death == null && player != null)
             death = player.gameObject.AddComponent<PlayerDeath>();
         if (death == null)
-            death = FindObjectOfType<PlayerDeath>();
+            death = Object.FindFirstObjectByType<PlayerDeath>();
         if (death != null)
             death.Kill(transform);
     }

@@ -8,7 +8,7 @@ public class KeyPickup : MonoBehaviour
 
     void Start()
     {
-        playerStats = FindObjectOfType<PlayerStats>();
+        playerStats = Object.FindAnyObjectByType<PlayerStats>();
     }
 
     private void OnTriggerEnter(Collider other)

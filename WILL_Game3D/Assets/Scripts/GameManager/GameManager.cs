@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        playerStats = FindObjectOfType<PlayerStats>();
+        playerStats = Object.FindAnyObjectByType<PlayerStats>();
     }
 
     void Update()
@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
         // Player may be spawned at runtime — keep trying until found
         if (playerStats == null)
         {
-            playerStats = FindObjectOfType<PlayerStats>();
+            playerStats = Object.FindAnyObjectByType<PlayerStats>();
             return;
         }
 

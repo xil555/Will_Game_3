@@ -1,183 +1,204 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
-public class MoveObjectController : MonoBehaviour 
+public class MoveObjectController : MonoBehaviour
 {
-	public float reachRange = 1.8f;			
+    public float reachRange = 1.8f;
 
-	private Animator anim;
-	private Camera fpsCam;
-	private GameObject player;
+    private Animator anim;
+    private Camera fpsCam;
+    private GameObject player;
 
-	private const string animBoolName = "isOpen_Obj_";
+    private const string animBoolName = "isOpen_Obj_";
 
-	private bool playerEntered;
-	private bool showInteractMsg;
-	private GUIStyle guiStyle;
-	private string msg;
+    private bool playerEntered;
+    private bool showInteractMsg;
+    private GUIStyle guiStyle;
+    private GUIStyle dotStyle;
+    private string msg;
 
-	private int rayLayerMask; 
+    private int rayLayerMask;
 
+    public static int NearInteractableCount;
 
-	void Start()
-	{
-		//Initialize moveDrawController if script is enabled.
-		player = GameObject.FindGameObjectWithTag("Player");
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
 
-		fpsCam = Camera.main;
-		if (fpsCam == null)	//a reference to Camera is required for rayasts
-		{
-			Debug.LogError("A camera tagged 'MainCamera' is missing.");
-		}
+        fpsCam = Camera.main;
+        if (fpsCam == null)
+            Debug.LogError("A camera tagged 'MainCamera' is missing.");
 
-		//create AnimatorOverrideController to re-use animationController for sliding draws.
-		anim = GetComponent<Animator>(); 
-		anim.enabled = false;  //disable animation states by default.  
+        anim = GetComponent<Animator>();
+        if (anim != null)
+            anim.enabled = false;
 
-		//the layer used to mask raycast for interactable objects only
-		LayerMask iRayLM = LayerMask.NameToLayer("InteractRaycast");
-		rayLayerMask = 1 << iRayLM.value;  
+        int layer = LayerMask.NameToLayer("InteractRaycast");
+        if (layer >= 0)
+            rayLayerMask = 1 << layer;
+        else
+            rayLayerMask = Physics.DefaultRaycastLayers;
 
-		//setup GUI style settings for user prompts
-		setupGui();
+        setupGui();
+    }
 
-	}
-		
-	void OnTriggerEnter(Collider other)
-	{		
-		if (other.gameObject == player)		//player has collided with trigger
-		{			
-			playerEntered = true;
+    void OnTriggerEnter(Collider other)
+    {
+        if (!IsPlayerCollider(other))
+            return;
 
-		}
-	}
+        if (!playerEntered)
+            NearInteractableCount++;
 
-	void OnTriggerExit(Collider other)
-	{		
-		if (other.gameObject == player)		//player has exited trigger
-		{			
-			playerEntered = false;
-			//hide interact message as player may not have been looking at object when they left
-			showInteractMsg = false;		
-		}
-	}
+        playerEntered = true;
+    }
 
+    void OnTriggerExit(Collider other)
+    {
+        if (!IsPlayerCollider(other))
+            return;
 
+        if (playerEntered && NearInteractableCount > 0)
+            NearInteractableCount--;
 
-	void Update()
-	{		
-		if (playerEntered)
-		{	
+        playerEntered = false;
+        showInteractMsg = false;
+    }
 
-			//center point of viewport in World space.
-			Vector3 rayOrigin = fpsCam.ViewportToWorldPoint(new Vector3(0.5f,0.5f,0f));
-			RaycastHit hit;
+    void OnDisable()
+    {
+        if (playerEntered && NearInteractableCount > 0)
+            NearInteractableCount--;
 
-			//if raycast hits a collider on the rayLayerMask
-			if (Physics.Raycast(rayOrigin,fpsCam.transform.forward, out hit,reachRange,rayLayerMask))
-			{
-				MoveableObject moveableObject = null;
-				//is the object of the collider player is looking at the same as me?
-				if (!isEqualToParent(hit.collider, out moveableObject))
-				{	//it's not so return;
-					return;
-				}
-					
-				if (moveableObject != null)		//hit object must have MoveableDraw script attached
-				{
-					showInteractMsg = true;
-					string animBoolNameNum = animBoolName + moveableObject.objectNumber.ToString();
+        playerEntered = false;
+    }
 
-					bool isOpen = anim.GetBool(animBoolNameNum);	//need current state for message.
-					msg = getGuiMsg(isOpen);
+    void Update()
+    {
+        if (!playerEntered || fpsCam == null || anim == null)
+            return;
 
-					if (Input.GetKeyUp(KeyCode.E) || Input.GetButtonDown("Fire1"))
-					{
-						anim.enabled = true;
-						anim.SetBool(animBoolNameNum,!isOpen);
-						msg = getGuiMsg(!isOpen);
-					}
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
-				}
-			}
-			else
-			{
-				showInteractMsg = false;
-			}
-		}
+        Ray ray = fpsCam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
 
-	}
+        if (Physics.Raycast(ray, out hit, reachRange, rayLayerMask, QueryTriggerInteraction.Ignore))
+        {
+            MoveableObject moveableObject = null;
+            if (!isEqualToParent(hit.collider, out moveableObject))
+            {
+                showInteractMsg = false;
+                return;
+            }
 
-	//is current gameObject equal to the gameObject of other.  check its parents
-	private bool isEqualToParent(Collider other, out MoveableObject draw)
-	{
-		draw = null;
-		bool rtnVal = false;
-		try
-		{
-			int maxWalk = 6;
-			draw = other.GetComponent<MoveableObject>();
+            if (moveableObject != null)
+            {
+                showInteractMsg = true;
+                string animBoolNameNum = animBoolName + moveableObject.objectNumber.ToString();
 
-			GameObject currentGO = other.gameObject;
-			for(int i=0;i<maxWalk;i++)
-			{
-				if (currentGO.Equals(this.gameObject))
-				{
-					rtnVal = true;	
-					if (draw== null) draw = currentGO.GetComponentInParent<MoveableObject>();
-					break;			//exit loop early.
-				}
+                bool isOpen = anim.GetBool(animBoolNameNum);
+                msg = getGuiMsg(isOpen);
 
-				//not equal to if reached this far in loop. move to parent if exists.
-				if (currentGO.transform.parent != null)		//is there a parent
-				{
-					currentGO = currentGO.transform.parent.gameObject;
-				}
-			}
-		} 
-		catch (System.Exception e)
-		{
-			Debug.Log(e.Message);
-		}
-			
-		return rtnVal;
+                if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Fire1"))
+                {
+                    anim.enabled = true;
+                    anim.SetBool(animBoolNameNum, !isOpen);
+                    msg = getGuiMsg(!isOpen);
+                }
+            }
+        }
+        else
+        {
+            showInteractMsg = false;
+        }
+    }
 
-	}
-		
+    bool IsPlayerCollider(Collider other)
+    {
+        if (other == null)
+            return false;
 
-	#region GUI Config
+        if (other.CompareTag("Player"))
+            return true;
 
-	//configure the style of the GUI
-	private void setupGui()
-	{
-		guiStyle = new GUIStyle();
-		guiStyle.fontSize = 16;
-		guiStyle.fontStyle = FontStyle.Bold;
-		guiStyle.normal.textColor = Color.white;
-		msg = "Press E/Fire1 to Open";
-	}
+        if (player == null)
+            return false;
 
-	private string getGuiMsg(bool isOpen)
-	{
-		string rtnVal;
-		if (isOpen)
-		{
-			rtnVal = "Press E/Fire1 to Close";
-		}else
-		{
-			rtnVal = "Press E/Fire1 to Open";
-		}
+        return other.gameObject == player || other.transform.IsChildOf(player.transform);
+    }
 
-		return rtnVal;
-	}
+    private bool isEqualToParent(Collider other, out MoveableObject draw)
+    {
+        draw = null;
+        bool rtnVal = false;
+        try
+        {
+            int maxWalk = 6;
+            draw = other.GetComponent<MoveableObject>();
 
-	void OnGUI()
-	{
-		if (showInteractMsg)  //show on-screen prompts to user for guide.
-		{
-			GUI.Label(new Rect (50,Screen.height - 50,200,50), msg,guiStyle);
-		}
-	}		
-	//End of GUI Config --------------
-	#endregion
+            GameObject currentGO = other.gameObject;
+            for (int i = 0; i < maxWalk; i++)
+            {
+                if (currentGO.Equals(this.gameObject))
+                {
+                    rtnVal = true;
+                    if (draw == null)
+                        draw = currentGO.GetComponentInParent<MoveableObject>();
+                    break;
+                }
+
+                if (currentGO.transform.parent != null)
+                    currentGO = currentGO.transform.parent.gameObject;
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e.Message);
+        }
+
+        return rtnVal;
+    }
+
+    #region GUI Config
+
+    private void setupGui()
+    {
+        guiStyle = new GUIStyle();
+        guiStyle.fontSize = 16;
+        guiStyle.fontStyle = FontStyle.Bold;
+        guiStyle.normal.textColor = Color.white;
+        msg = "Press LeftClick to Open";
+
+        dotStyle = new GUIStyle();
+        dotStyle.alignment = TextAnchor.MiddleCenter;
+        dotStyle.fontSize = 18;
+        dotStyle.fontStyle = FontStyle.Bold;
+        dotStyle.normal.textColor = Color.white;
+    }
+
+    private string getGuiMsg(bool isOpen)
+    {
+        if (isOpen)
+            return "Press Left Click to Close";
+
+        return "Press Left Click to Open";
+    }
+
+    void OnGUI()
+    {
+        if (showInteractMsg)
+            GUI.Label(new Rect(50, Screen.height - 50, 240, 50), msg, guiStyle);
+
+        if (playerEntered)
+        {
+            float x = Input.mousePosition.x;
+            float y = Screen.height - Input.mousePosition.y;
+            dotStyle.normal.textColor = showInteractMsg ? Color.green : Color.white;
+            GUI.Label(new Rect(x - 10f, y - 10f, 20f, 20f), "+", dotStyle);
+        }
+    }
+
+    #endregion
 }

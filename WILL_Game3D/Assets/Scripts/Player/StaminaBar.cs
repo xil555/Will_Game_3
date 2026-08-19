@@ -30,7 +30,7 @@ public class StaminaBar : MonoBehaviour
 
     void Start()
     {
-        playerStats = FindObjectOfType<PlayerStats>();
+        playerStats = Object.FindAnyObjectByType<PlayerStats>();
         canvasGroup = GetComponent<CanvasGroup>();
 
         if (staminaSlider != null)
@@ -45,7 +45,7 @@ public class StaminaBar : MonoBehaviour
     {
         if (playerStats == null)
         {
-            playerStats = FindObjectOfType<PlayerStats>();
+            playerStats = Object.FindAnyObjectByType<PlayerStats>();
             return;
         }
 
