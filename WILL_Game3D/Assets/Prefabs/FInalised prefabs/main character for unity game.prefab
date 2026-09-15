@@ -1049,6 +1049,7 @@ MonoBehaviour:
   fillImage: {fileID: 6839542047770256236}
   fullColor: {r: 0.2, g: 0.85, b: 0.2, a: 1}
   emptyColor: {r: 0.85, g: 0.15, b: 0.15, a: 1}
+  boostColor: {r: 0.25, g: 0.95, b: 1, a: 1}
   smoothSpeed: 8
   hideWhenFull: 1
   hideDelay: 2
@@ -1103,6 +1104,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
       propertyPath: m_Name
       value: main character for unity game
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a4a0b1bd112eb424f97c073fc9b18e37, type: 3}
       propertyPath: m_TagString
@@ -1242,6 +1247,10 @@ MonoBehaviour:
   walkBobMultiplier: 1
   sprintBobMultiplier: 1.75
   sprintFrequencyMultiplier: 1.45
+  hideShakeRange: 14
+  hideShakeAmount: 0.07
+  hideShakeFrequency: 16
+  hideChaseShakeMultiplier: 1.6
 --- !u!95 &5717341480923513976
 Animator:
   serializedVersion: 7
@@ -1280,8 +1289,15 @@ MonoBehaviour:
   keys: 0
   battery: 0
   batteriesCollected: 0
+  energyDrinks: 0
+  drinkKey: 113
   maxStamina: 100
   stamina: 0
+  storedDrinkRestore: 50
+  storedDrinkDuration: 8
+  storedDrinkDrainMultiplier: 0.5
+  storedDrinkRegenMultiplier: 1.8
+  storedDrinkSprintMultiplier: 1.12
 --- !u!114 &6663418014643488274
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -82,6 +82,19 @@
         "I hope you got all your things, dear, you don't wanna end up next to him.",
         "You should be going now. Home's still a long walk."
       ]
+    },
+    {
+      "id": "StrayDogIntro",
+      "lines": [
+        "Hey little guy... where did you come from?",
+        "Who do you belong to?"
+      ]
+    },
+    {
+      "id": "StrayDogWait",
+      "lines": [
+        "Wait!"
+      ]
     }
   ]
 }
