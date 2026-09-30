@@ -10,6 +10,10 @@ public class KidDialogueTrigger : MonoBehaviour
     public TMP_Text dialogueText;
     public GameObject objectivePanel;
 
+    [Header("Objective")]
+    [Tooltip("Completed when this talk ends. Does not stop the kid from talking.")]
+    public string objectiveId = "MediumKid";
+
     [Header("Cameras")]
     public Camera cutsceneCamera;
 
@@ -139,6 +143,9 @@ public class KidDialogueTrigger : MonoBehaviour
         Collider col = GetComponent<Collider>();
         if (col != null)
             col.enabled = false;
+
+        if (ObjectiveManager.Instance != null && !string.IsNullOrEmpty(objectiveId))
+            ObjectiveManager.Instance.ReportNpcTalked(objectiveId);
     }
 
     void CachePlayerControls(GameObject player)

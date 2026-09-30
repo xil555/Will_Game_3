@@ -65,6 +65,14 @@ public class Flashlight : MonoBehaviour
 
         if (playerStats.battery <= 0)
         {
+            PlayerReserves reserves = PlayerReserves.Get(playerStats);
+            if (reserves != null && reserves.TryConsumeBattery())
+            {
+                playerStats.battery = maxBattery;
+                drainRemainder = 0f;
+                return;
+            }
+
             playerStats.battery = 0;
             drainRemainder = 0f;
             SetFlashlight(false);

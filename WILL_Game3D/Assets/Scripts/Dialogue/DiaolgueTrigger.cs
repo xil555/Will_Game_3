@@ -39,6 +39,26 @@ public class DialogueTrigger : MonoBehaviour
     public string followUpNpcId;
     public string followUpTalkPrompt = "Press E to talk";
 
+    [Header("After this talk ends")]
+    [Tooltip("These objects turn on only after the conversation closes. Use this for the men in the woman's house.")]
+    public GameObject[] enableAfterDialogue;
+
+    public bool ShouldDelayReach
+    {
+        get { return !string.IsNullOrEmpty(dialogueId) && !hasPlayed; }
+    }
+
+    public bool HasFinishedDialogue
+    {
+        get
+        {
+            if (!hasPlayed || isStarting)
+                return false;
+
+            return DialogueManager.Instance == null || !DialogueManager.Instance.IsActive();
+        }
+    }
+
     bool UsesPressE
     {
         get { return startMode == StartMode.PressE || !string.IsNullOrEmpty(npcId); }
@@ -85,11 +105,14 @@ public class DialogueTrigger : MonoBehaviour
         if (!other.CompareTag(playerTag))
             return;
 
-        if (playOnce && hasPlayed && !FollowUpAvailable())
-            return;
-
         playerInside = true;
         playerTransform = other.transform;
+
+        if (!IsCurrentStep())
+            return;
+
+        if (playOnce && hasPlayed && !FollowUpAvailable())
+            return;
 
         if (UsesPressE)
         {
@@ -112,6 +135,12 @@ public class DialogueTrigger : MonoBehaviour
 
     void Update()
     {
+        if (!IsCurrentStep())
+        {
+            InteractPromptUI.Hide(this);
+            return;
+        }
+
         if (!UsesPressE)
             return;
 
@@ -157,6 +186,9 @@ public class DialogueTrigger : MonoBehaviour
         if (isStarting)
             return;
 
+        if (!IsCurrentStep())
+            return;
+
         string idToPlay = FollowUpAvailable() ? followUpDialogueId : dialogueId;
         if (string.IsNullOrEmpty(idToPlay))
             return;
@@ -176,10 +208,6 @@ public class DialogueTrigger : MonoBehaviour
             dialogueLook = sourceTransform.GetComponentInParent<PlayerDialogueLook>();
 
         startingFollowUp = FollowUpAvailable();
-        if (startingFollowUp)
-            followUpPlayed = true;
-        else
-            hasPlayed = true;
         isStarting = true;
         InteractPromptUI.Hide(this);
 
@@ -220,10 +248,50 @@ public class DialogueTrigger : MonoBehaviour
         string idToPlay = startingFollowUp ? followUpDialogueId : dialogueId;
         string reportId = startingFollowUp ? followUpNpcId : npcId;
 
+        if (startingFollowUp)
+            followUpPlayed = true;
+        else
+            hasPlayed = true;
+
         DialogueManager.Instance.StartDialogue(idToPlay);
+
+        if (!DialogueManager.Instance.IsActive())
+        {
+            hasPlayed = false;
+            followUpPlayed = false;
+            Debug.LogWarning("DialogueTrigger: '" + idToPlay + "' did not start. Check the Dialogue Id matches Dialogue.json.");
+            return;
+        }
 
         if (ObjectiveManager.Instance != null && !string.IsNullOrEmpty(reportId))
             ObjectiveManager.Instance.ReportNpcTalked(reportId);
+
+        if (enableAfterDialogue != null && enableAfterDialogue.Length > 0)
+            StartCoroutine(EnableAfterDialogueEnds());
+    }
+
+    IEnumerator EnableAfterDialogueEnds()
+    {
+        yield return null;
+
+        float waitForStart = 1f;
+        while (waitForStart > 0f && (DialogueManager.Instance == null || !DialogueManager.Instance.IsActive()))
+        {
+            waitForStart -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (DialogueManager.Instance == null || !DialogueManager.Instance.IsActive())
+            yield break;
+
+        while (DialogueManager.Instance.IsActive())
+            yield return null;
+
+        for (int i = 0; i < enableAfterDialogue.Length; i++)
+        {
+            if (enableAfterDialogue[i] != null)
+                enableAfterDialogue[i].SetActive(true);
+        }
     }
 
     bool FollowUpAvailable()
@@ -244,6 +312,36 @@ public class DialogueTrigger : MonoBehaviour
             ObjectiveManager.Instance.CurrentObjective.triggerId,
             followUpNpcId,
             System.StringComparison.OrdinalIgnoreCase);
+    }
+
+    bool IsCurrentStep()
+    {
+        if (ObjectiveManager.Instance == null || !ObjectiveManager.Instance.HasActiveObjective)
+            return true;
+
+        string wanted = ObjectiveManager.Instance.CurrentObjective.triggerId;
+        if (string.IsNullOrEmpty(wanted))
+            return true;
+
+        if (FollowUpAvailable()
+            && string.Equals(followUpNpcId, wanted, System.StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (!string.IsNullOrEmpty(npcId)
+            && string.Equals(npcId, wanted, System.StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        ObjectiveReach reach = GetComponent<ObjectiveReach>();
+        if (reach != null
+            && !string.IsNullOrEmpty(reach.triggerId)
+            && string.Equals(reach.triggerId, wanted, System.StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        bool tiedToObjective = !string.IsNullOrEmpty(npcId)
+            || !string.IsNullOrEmpty(followUpNpcId)
+            || reach != null;
+
+        return !tiedToObjective;
     }
 
     string GetTalkPrompt()
@@ -274,19 +372,21 @@ public class DialogueTrigger : MonoBehaviour
 
     void CreateMarker()
     {
-        Collider col = GetComponent<Collider>();
-        float top = col != null ? col.bounds.max.y : transform.position.y;
-        Vector3 worldPos = col != null
-            ? new Vector3(col.bounds.center.x, top + 0.55f, col.bounds.center.z)
-            : transform.position + Vector3.up * markerHeight;
-
         GameObject rootGo = new GameObject("DialogueMarker");
         rootGo.transform.SetParent(transform, false);
-        rootGo.transform.position = worldPos;
         markerRoot = rootGo.transform;
+        PlaceMarker();
 
-        arrowText = CreateWorldText(rootGo.transform, "Arrow", "▼", 8f, new Vector3(0f, 0.15f, 0f));
+        arrowText = CreateWorldText(rootGo.transform, "Arrow", "▼", 8f, Vector3.zero);
         arrowText.color = markerColor;
+    }
+
+    void PlaceMarker()
+    {
+        if (markerRoot == null)
+            return;
+
+        markerRoot.position = transform.position + Vector3.up * markerHeight;
     }
 
     static TextMeshPro CreateWorldText(Transform parent, string name, string text, float fontSize, Vector3 localPos)
@@ -315,6 +415,8 @@ public class DialogueTrigger : MonoBehaviour
         if (markerRoot == null)
             return;
 
+        PlaceMarker();
+
         Camera cam = Camera.main;
         float dist = float.MaxValue;
         if (cam != null)
@@ -326,10 +428,11 @@ public class DialogueTrigger : MonoBehaviour
         bool dialogueOpen = DialogueManager.Instance != null && DialogueManager.Instance.IsActive();
         bool hideBecausePlayed = hideMarkerAfterPlayed && hasPlayed && !FollowUpAvailable() && !isStarting && !dialogueOpen;
         bool inViewRange = dist <= markerVisibleRange;
+        bool isThisStep = IsCurrentStep();
 
         if (arrowText != null)
         {
-            bool showArrow = showMarker && inViewRange && !dialogueOpen && !isStarting && !hideBecausePlayed;
+            bool showArrow = showMarker && isThisStep && inViewRange && !dialogueOpen && !isStarting && !hideBecausePlayed;
             arrowText.enabled = showArrow;
             if (showArrow)
             {

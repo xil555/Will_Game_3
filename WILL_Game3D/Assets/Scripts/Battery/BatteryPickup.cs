@@ -78,7 +78,13 @@ public class BatteryPickup : MonoBehaviour
             return;
         }
 
-        playerStats.battery = Mathf.Min(playerStats.battery + batteryAmount, maxBattery);
+        PlayerReserves reserves = PlayerReserves.Get(playerStats);
+        if (reserves == null || !reserves.TryAddBattery())
+        {
+            Debug.Log("BatteryPickup: reserve slots are full.");
+            return;
+        }
+
         playerStats.batteriesCollected++;
 
         if (ObjectiveManager.Instance != null)

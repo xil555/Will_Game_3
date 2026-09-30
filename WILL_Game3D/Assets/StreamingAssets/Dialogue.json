@@ -95,6 +95,153 @@
       "lines": [
         "Wait!"
       ]
+    },
+    {
+      "id": "MediumOldManHouse",
+      "lines": [
+        "This must be the house.",
+        "The kid said the old man took the dog in here."
+      ]
+    },
+    {
+      "id": "MediumOldMan",
+      "lines": [
+        "Old man: You looking for that dog?",
+        "I took it because it was barking all the time.",
+        "That kid needs to learn to keep its pets away from me.",
+        "Or he's gonna get it."
+      ]
+    },
+    {
+      "id": "MediumFoundDog",
+      "lines": [
+        "There you are.",
+        "Let's get you out of here."
+      ]
+    },
+    {
+      "id": "MediumHeadingHome",
+      "lines": [
+        "The dog's safe.",
+        "I should get home."
+      ]
+    },
+    {
+      "id": "HardStrangeMan",
+      "lines": [
+        "Strange man: Oh. Hey. It's you again. How you doing?",
+        "Jayden: I'm alright. Just heading home.",
+        "Strange man: Yeah. You should just make sure you get home safe. It's quite a dangerous neighbourhood around here.",
+        "Jayden: Okay. Cool."
+      ]
+    },
+    {
+      "id": "HardKeysMissing",
+      "lines": [
+        "Wait... what the hella?",
+        "Did that guy seriously steal my keys and my wallet",
+        "I need to find him. There's no way I can go home without them now.",
+        "Maybe there's someone I can ask for help."
+      ]
+    },
+    {
+      "id": "HardGranny",
+      "lines": [
+        "Grandma: Yes, dear?",
+        "Jayden: Hi, sorry to bother you. A man I was just talking to took my keys and my wallet. I need to find him. Do you know where he stays?",
+        "Grandma: Oh... I wouldn't know about that.",
+        "But the man next door knows just about everyone around here. You should ask him.",
+        "You look a little tired too. If you need anything, take what you need inside.",
+        "Oh, wait! Before you go, could you help me with something?",
+        "I've been trying to move this thing all morning, but I can't manage it on my own.",
+        "Jayden: Yeah, sure. Where do you want it?"
+      ]
+    },
+    {
+      "id": "HardGrannyNext",
+      "lines": [
+        "Grandma: There. That's perfect. Thank you, dear.",
+        "Go ask the man next door. He'll probably know where that man stays.",
+        "Jayden: Okay. Thanks."
+      ]
+    },
+    {
+      "id": "HardHouseNoise",
+      "lines": [
+        "What's that noise?",
+        "Someone's getting hurt in there.",
+        "Let me check the gate."
+      ]
+    },
+    {
+      "id": "HardGateLocked",
+      "lines": [
+        "It's locked.",
+        "I need to find another way around."
+      ]
+    },
+    {
+      "id": "HardBackWay",
+      "lines": [
+        "This way's open.",
+        "I should get inside and check on her."
+      ]
+    },
+    {
+      "id": "HardWoman",
+      "lines": [
+        "Jayden: Are you okay?",
+        "Woman: I'm fine.",
+        "Jayden: I heard shouting.",
+        "Woman: You shouldn't be here.",
+        "Jayden: I was just trying to see if you needed help.",
+        "Woman: You need to leave.",
+        "Jayden: What's happening?",
+        "Woman: He does this all the time.",
+        "Jayden: You should leave.",
+        "Woman: I know. But you need to worry about yourself right now.",
+        "He's still downstairs. If he finds you in this house, he's going to come after you too.",
+        "Jayden: Wait. Someone stole my wallet and keys. Do you know who he is?",
+        "Woman: I know who you're talking about. He lives in the last house on the street.",
+        "People go there looking for their things all the time. If your stuff is there, you're probably going to have to take it back yourself.",
+        "Jayden: Okay. Thank you.",
+        "Woman: Just be careful."
+      ]
+    },
+    {
+      "id": "HardLeftHouse",
+      "lines": [
+        "Thank God I'm out of that house.",
+        "Now it's time to find that man and get my stuff."
+      ]
+    },
+    {
+      "id": "HardStrangeManAgain",
+      "lines": [
+        "Jayden: Why'd you steal my stuff?",
+        "Strange man: Don't take it personal. It's just business.",
+        "But I kinda like you, so you can go get it yourself.",
+        "Just don't trust anyone in there."
+      ]
+    },
+    {
+      "id": "HardFoundWallet",
+      "lines": [
+        "That's mine.",
+        "Okay. Now I need to find my keys. I definitely can't leave without those."
+      ]
+    },
+    {
+      "id": "HardFoundKeys",
+      "lines": [
+        "Finally."
+      ]
+    },
+    {
+      "id": "HardEscapedThief",
+      "lines": [
+        "I can finally go home."
+      ]
     }
   ]
 }

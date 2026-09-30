@@ -21,6 +21,10 @@ public class CutsceneEnter : MonoBehaviour
     public float dogRunSpeed = 3f;
     public float dogStopDistance = 0.2f;
 
+    [Header("Objective")]
+    [Tooltip("Completed when this cutscene ends. Does not stop the cutscene from playing.")]
+    public string objectiveId = "MediumDog";
+
     [Header("Dialogue UI")]
     public GameObject dialoguePanel;
     public TMP_Text speakerName;
@@ -48,14 +52,11 @@ public class CutsceneEnter : MonoBehaviour
         if (cutsceneStarted)
             return;
 
-        // Only trigger for the spawned Player
         if (!other.CompareTag("Player"))
             return;
 
         player = other.transform.root.gameObject;
-
         cutsceneStarted = true;
-
         StartCoroutine(PlayCutscene());
     }
 
@@ -240,6 +241,9 @@ public class CutsceneEnter : MonoBehaviour
 
         // Prevent the cutscene from triggering again
         cutsceneStarted = true;
+
+        if (ObjectiveManager.Instance != null && !string.IsNullOrEmpty(objectiveId))
+            ObjectiveManager.Instance.ReportTriggerReached(objectiveId);
     }
 
     // =========================================

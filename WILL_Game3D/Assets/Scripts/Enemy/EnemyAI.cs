@@ -117,6 +117,7 @@ public class EnemyAI : MonoBehaviour
     float stuckTimer;
     float lastRemaining = 999f;
     bool freezePendingPursue;
+    bool heldForDialogue;
     bool hasLastKnown;
     bool killedPlayer;
     Vector3 lastKnownPosition;
@@ -181,6 +182,25 @@ public class EnemyAI : MonoBehaviour
             FacePoint(player != null ? player.position : lastKnownPosition);
             UpdateAnimator();
             return;
+        }
+
+        if (DialogueManager.Instance != null && DialogueManager.Instance.IsActive())
+        {
+            heldForDialogue = true;
+            if (agent.isOnNavMesh)
+            {
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+            }
+            UpdateAnimator();
+            return;
+        }
+
+        if (heldForDialogue)
+        {
+            heldForDialogue = false;
+            if (agent.isOnNavMesh)
+                agent.isStopped = false;
         }
 
         ResolvePlayer();

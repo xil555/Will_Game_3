@@ -106,7 +106,10 @@ public class PlayerDialogueLook : MonoBehaviour
         }
 
         if (isRunning)
+        {
+            onComplete?.Invoke();
             return;
+        }
 
         StartCoroutine(FaceTargetSmoothRoutine(target, onComplete));
     }
