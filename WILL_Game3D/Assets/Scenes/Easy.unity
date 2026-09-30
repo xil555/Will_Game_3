@@ -2166,7 +2166,7 @@ Transform:
   m_GameObject: {fileID: 251579842}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 57.681625, y: -0.182, z: 56.746}
+  m_LocalPosition: {x: 55.51, y: -0.182, z: 63.17}
   m_LocalScale: {x: 0.81615037, y: 0.81615, z: 0.81615037}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8304,11 +8304,11 @@ MonoBehaviour:
   followUpNpcId: 
   followUpTalkPrompt: Press E to talk
   enableAfterDialogue: []
-  lookAtTarget: {fileID: 251579843}
+  lookAtTarget: {fileID: 1405855198}
   rotatePlayerToTarget: 1
   waitForTurnBeforeDialogue: 1
   showMarker: 1
-  markerHeight: 2.15
+  markerHeight: 3
   markerVisibleRange: 22
   markerColor: {r: 0.85, g: 0.15, b: 0.15, a: 0.95}
   hideMarkerAfterPlayed: 1
@@ -14177,6 +14177,163 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1244465511
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 206010345}
+    m_Modifications:
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Size.x
+      value: 0.28235412
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Size.z
+      value: 0.19738334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Center.x
+      value: -0.04071614
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Center.y
+      value: -0.002283468
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Center.z
+      value: -0.0020287393
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.0085514
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.0095172
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.54613
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.032
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.091
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.208
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.48709112
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.054481696
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.8679644
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.08007462
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 4.929
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 116.038
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -9.975
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Name
+      value: EnergyDrink2 (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2338932156651112549, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1244465515}
+    - targetCorrespondingSourceObject: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1244465514}
+  m_SourcePrefab: {fileID: 100100000, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+--- !u!4 &1244465512 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+  m_PrefabInstance: {fileID: 1244465511}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1244465513 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+  m_PrefabInstance: {fileID: 1244465511}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1244465514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244465513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d9922a3f08e6d4185803cdeb68c2f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnergyDrink
+  consumeOnContact: 1
+  destroyOnUse: 1
+  drinkClip: {fileID: 0}
+  staminaRestore: 50
+  boostDuration: 8
+  drainMultiplier: 0.5
+  regenMultiplier: 1.8
+  sprintSpeedMultiplier: 1.12
+  pickupPrompt: Press E to pick up energy drink
+  showPickupIndicator: 1
+  indicatorOffset: {x: 0, y: 1.2, z: 0}
+  indicatorColor: {r: 0.25, g: 0.95, b: 1, a: 0.95}
+  indicatorPrefab: {fileID: 0}
+  indicatorVisibleRange: 40
+--- !u!65 &1244465515
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244465513}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06, y: 0.058495685, z: 0.10332656}
+  m_Center: {x: 0, y: 9.313227e-10, z: 0.04499586}
 --- !u!1001 &1251679263
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14553,6 +14710,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4000010731867862, guid: 23d25b2e2d4364dd4b92c52ef40cd36e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1291093121}
+    - targetCorrespondingSourceObject: {fileID: 4000010731867862, guid: 23d25b2e2d4364dd4b92c52ef40cd36e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1244465512}
+    - targetCorrespondingSourceObject: {fileID: 4000010731867862, guid: 23d25b2e2d4364dd4b92c52ef40cd36e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1281947176}
     - targetCorrespondingSourceObject: {fileID: 4000011650453584, guid: 23d25b2e2d4364dd4b92c52ef40cd36e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1384853311}
@@ -15112,6 +15275,163 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bd6e629b1918c049a29f3d33f529445, type: 3}
+--- !u!1001 &1281947175
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 206010345}
+    m_Modifications:
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Size.x
+      value: 0.28235412
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Size.z
+      value: 0.19738334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Center.x
+      value: -0.04071614
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Center.y
+      value: -0.002283468
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038169258087508900, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Center.z
+      value: -0.0020287393
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.0085514
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.0095172
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.54613
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.172
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.444
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.48709112
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.054481696
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.8679644
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.08007462
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 4.929
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 116.038
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -9.975
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      propertyPath: m_Name
+      value: EnergyDrink2 (3)
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2338932156651112549, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1281947179}
+    - targetCorrespondingSourceObject: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1281947178}
+  m_SourcePrefab: {fileID: 100100000, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+--- !u!4 &1281947176 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3875361105445768021, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+  m_PrefabInstance: {fileID: 1281947175}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1281947177 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4504686803999363567, guid: 3e87599dc94f8504da992c25ec32854b, type: 3}
+  m_PrefabInstance: {fileID: 1281947175}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1281947178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281947177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d9922a3f08e6d4185803cdeb68c2f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnergyDrink
+  consumeOnContact: 1
+  destroyOnUse: 1
+  drinkClip: {fileID: 0}
+  staminaRestore: 50
+  boostDuration: 8
+  drainMultiplier: 0.5
+  regenMultiplier: 1.8
+  sprintSpeedMultiplier: 1.12
+  pickupPrompt: Press E to pick up energy drink
+  showPickupIndicator: 1
+  indicatorOffset: {x: 0, y: 1.2, z: 0}
+  indicatorColor: {r: 0.25, g: 0.95, b: 1, a: 0.95}
+  indicatorPrefab: {fileID: 0}
+  indicatorVisibleRange: 40
+--- !u!65 &1281947179
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281947177}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06, y: 0.058495685, z: 0.10332656}
+  m_Center: {x: 0, y: 9.313227e-10, z: 0.04499586}
 --- !u!1001 &1287298632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16367,6 +16687,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 787538126}
   m_SourcePrefab: {fileID: 100100000, guid: eefdc671ed09b484eaecfbc2b6b01c93, type: 3}
+--- !u!4 &1405855198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2716885088595533030, guid: eefdc671ed09b484eaecfbc2b6b01c93, type: 3}
+  m_PrefabInstance: {fileID: 1405855197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1410115502
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21931,11 +22256,11 @@ MonoBehaviour:
   followUpNpcId: EasyGrannyConfront
   followUpTalkPrompt: Press E to talk to Granny
   enableAfterDialogue: []
-  lookAtTarget: {fileID: 0}
+  lookAtTarget: {fileID: 1906555112}
   rotatePlayerToTarget: 1
   waitForTurnBeforeDialogue: 1
   showMarker: 1
-  markerHeight: 10
+  markerHeight: 3
   markerVisibleRange: 22
   markerColor: {r: 0.85, g: 0.15, b: 0.15, a: 0.95}
   hideMarkerAfterPlayed: 1
@@ -21953,6 +22278,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveTrigger
   triggerId: EasyGrannyConfront
   triggerOnce: 1
+--- !u!4 &1906555112 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2774808727293773327, guid: 8c63c2444bb17774a8c2a25fd87ae63b, type: 3}
+  m_PrefabInstance: {fileID: 143485479}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1908653391 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 878091939082644936, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
@@ -23568,6 +23898,11 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1974427200 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5339130301091616334, guid: fddebf1006faf8243bfa4f250660e465, type: 3}
+  m_PrefabInstance: {fileID: 1974427197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!82 &1974427201
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23724,11 +24059,11 @@ MonoBehaviour:
   followUpNpcId: 
   followUpTalkPrompt: Press E to talk Strange Man
   enableAfterDialogue: []
-  lookAtTarget: {fileID: 0}
+  lookAtTarget: {fileID: 1974427200}
   rotatePlayerToTarget: 1
   waitForTurnBeforeDialogue: 1
   showMarker: 1
-  markerHeight: 1
+  markerHeight: 3
   markerVisibleRange: 22
   markerColor: {r: 0.85, g: 0.15, b: 0.15, a: 0.95}
   hideMarkerAfterPlayed: 1

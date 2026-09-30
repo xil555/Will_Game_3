@@ -3161,184 +3161,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 878091939082644936, guid: c153f147d64b9d84d89ed2a4ee3b6951, type: 3}
   m_PrefabInstance: {fileID: 1461092357455480068}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &208529859 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-  m_PrefabInstance: {fileID: 2049204686}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &208529860
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208529859}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0.91, z: 0}
---- !u!114 &208529861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208529859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a4c61abc42749b4d9d24675a03b0c27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueTest
-  npcID: TutorialNPC
-  npcDisplayName: 
-  talkPrompt: Press E to speak to {name}
-  finishDialogueId: FinishTutorialNPC
-  nextSceneName: LobbySystem
-  outerRange: {fileID: 208529862}
-  innerRange: {fileID: 208529860}
---- !u!135 &208529862
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208529859}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 6.21
-  m_Center: {x: 0, y: 0.78, z: 0}
---- !u!82 &208529864
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208529859}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!114 &208529865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208529859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87c1fadb0ed7cc84ebc7cac7f59337db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCGreetingManager
-  npcAudioSource: {fileID: 208529864}
-  interactionClip: {fileID: 8300000, guid: 11ae4dcbf41972f40a0055fcfb63c569, type: 3}
-  playOnlyOnce: 1
 --- !u!1001 &210848428
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3591,72 +3413,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a68d5b2a44ea9c4f9769976df5fe084, type: 3}
---- !u!1 &246839922 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-  m_PrefabInstance: {fileID: 525365809}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &246839923
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246839922}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0.91, z: 0}
---- !u!114 &246839924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246839922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a4c61abc42749b4d9d24675a03b0c27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueTest
-  npcID: otherman
-  npcDisplayName: 
-  talkPrompt: Press E to speak to {name}
-  finishDialogueId: FinishTutorialNPC
-  nextSceneName: LobbySystem
-  outerRange: {fileID: 246839925}
-  innerRange: {fileID: 246839923}
---- !u!135 &246839925
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 246839922}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 6.21
-  m_Center: {x: 0, y: 0.78, z: 0}
 --- !u!1001 &249250655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7478,73 +7234,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a68d5b2a44ea9c4f9769976df5fe084, type: 3}
---- !u!1001 &525365809
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.31
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.27000046
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -10.41
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9563201
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.2923215
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 33.994
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_Name
-      value: NPC (2)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 635547659545568360, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 246839925}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 246839924}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 246839923}
-  m_SourcePrefab: {fileID: 100100000, guid: b8e036695835bee439108d5ac99d4251, type: 3}
 --- !u!1 &526749321 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000011967615788, guid: 23d25b2e2d4364dd4b92c52ef40cd36e, type: 3}
@@ -9343,7 +9032,7 @@ MonoBehaviour:
   showMarker: 1
   markerHeight: 2.15
   markerVisibleRange: 22
-  markerColor: {r: 1, g: 0.86, b: 0.2, a: 0.95}
+  markerColor: {r: 1, g: 0.64949024, b: 0, a: 0.95}
 --- !u!65 &676425297
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17828,6 +17517,7 @@ MonoBehaviour:
   followUpDialogueId: 
   followUpNpcId: 
   followUpTalkPrompt: 
+  enableAfterDialogue: []
   lookAtTarget: {fileID: 1642040369}
   rotatePlayerToTarget: 1
   waitForTurnBeforeDialogue: 1
@@ -28208,7 +27898,7 @@ MonoBehaviour:
   showMarker: 1
   markerHeight: 2.15
   markerVisibleRange: 22
-  markerColor: {r: 1, g: 0.86, b: 0.2, a: 0.95}
+  markerColor: {r: 1, g: 0.61359364, b: 0, a: 0.95}
 --- !u!65 &1870382818
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29898,11 +29588,12 @@ MonoBehaviour:
   followUpDialogueId: FinishTutorialNPC
   followUpNpcId: FinishTutorialNPC
   followUpTalkPrompt: Press E to talk to strange man
+  enableAfterDialogue: []
   lookAtTarget: {fileID: 0}
   rotatePlayerToTarget: 1
   waitForTurnBeforeDialogue: 1
   showMarker: 1
-  markerHeight: 1.5
+  markerHeight: 3
   markerVisibleRange: 22
   markerColor: {r: 0.85, g: 0.15, b: 0.15, a: 0.95}
   hideMarkerAfterPlayed: 1
@@ -31882,78 +31573,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7aa9510505b4cc458ea18abc65e4672, type: 3}
---- !u!1001 &2049204686
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -21.799582
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -9.902262
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -36.91791
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9563201
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.2923215
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 33.994
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      propertyPath: m_Name
-      value: NPC (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 208529862}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 208529861}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 208529860}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 208529865}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b8e036695835bee439108d5ac99d4251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 208529864}
-  m_SourcePrefab: {fileID: 100100000, guid: b8e036695835bee439108d5ac99d4251, type: 3}
 --- !u!1001 &2052118719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32400,7 +32019,7 @@ MonoBehaviour:
   showMarker: 1
   markerHeight: 2.15
   markerVisibleRange: 22
-  markerColor: {r: 1, g: 0.86, b: 0.2, a: 0.95}
+  markerColor: {r: 1, g: 0.51695096, b: 0, a: 0.95}
 --- !u!65 &2064664634
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -34403,8 +34022,6 @@ SceneRoots:
   - {fileID: 893985959}
   - {fileID: 1500297899}
   - {fileID: 1407362279}
-  - {fileID: 2049204686}
-  - {fileID: 525365809}
   - {fileID: 5001834142035645518}
   - {fileID: 1055240202}
   - {fileID: 1416491524}
